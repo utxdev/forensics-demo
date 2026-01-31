@@ -123,6 +123,9 @@ def extract(target):
                 target_db = "databases/calllog.db"
                 parser_class = ContactsParser
                 output_file = "call_logs.json"
+            
+            # Additional Check: Use content provider fallback heavily for calls
+            # Modern Android often blocks calllog.db backup.
 
             # 1. Trigger Backup
             logger.info("Starting Backup...")
@@ -149,6 +152,9 @@ def extract(target):
                 if custom_backup_name and custom_backup_name in files:
                     db_path = os.path.join(root, custom_backup_name)
                     break
+                if target == 'calls' and 'contacts2.db' in files:
+                     db_path = os.path.join(root, 'contacts2.db')
+                     break
             
             if not db_path:
                  # Backup failed (likely allowBackup=false). Try Fallback for Location.
@@ -162,6 +168,16 @@ def extract(target):
                      else:
                          return jsonify({"error": "No location data found in backup or system services."}), 404
                  
+                 if target == 'calls':
+                     logger.info("Backup empty. Attempting content provider fallback for calls...")
+                     fallback_data = extract_calls_via_content_provider(connector)
+                     if fallback_data:
+                         with open(output_file, 'w') as f:
+                            json.dump(fallback_data, f, indent=4, default=str)
+                         return jsonify({"success": True, "data": fallback_data})
+                     else:
+                         return jsonify({"error": "No call logs found."}), 404
+
                  return jsonify({"error": f"Database {target_filename} not found in backup."}), 404
 
             # 3. Parse
@@ -330,6 +346,67 @@ def extract_location_via_dumpsys(connector):
         return unique_data
     except Exception as e:
         logger.error(f"Dumpsys location extraction failed: {e}")
+        return []
+
+def extract_calls_via_content_provider(connector):
+    """
+    Fallback: Extracts call logs via content provider query.
+    Requires device to be unlocked often, or shell permissions.
+    """
+    try:
+        # Query the call_log provider
+        # Columns: number, date, duration, type, name
+        cmd = "content query --uri content://call_log/calls --projection number:date:duration:type:name"
+        output = connector.shell(cmd)
+        
+        # Output format is usually:
+        # Row: 0 number=123, date=123..., ...
+        
+        data = []
+        for line in output.splitlines():
+            if line.startswith("Row:"):
+                # Parse the K=V pairs
+                # This is a simple parser, might need more robustness for commas in names
+                # But typically name is just a name.
+                
+                entry = {}
+                parts = line.split(", ") # Split by ", " sequence
+                for part in parts:
+                    if "=" in part:
+                         k, v = part.split("=", 1)
+                         entry[k.strip()] = v.strip()
+                
+                # Normalize keys and values
+                # Type: 1=Incoming, 2=Outgoing, 3=Missed
+                call_type = entry.get('type', "0")
+                type_label = "Unknown"
+                if call_type == "1": type_label = "Incoming"
+                elif call_type == "2": type_label = "Outgoing"
+                elif call_type == "3": type_label = "Missed"
+                
+                # Date
+                date_ms = entry.get('date', "0")
+                try:
+                    ts = float(date_ms) / 1000
+                    date_str = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                except:
+                    date_str = date_ms
+
+                data.append({
+                    "number": entry.get('number', "Unknown"),
+                    "date": date_ms, # Keep raw ms for frontend sorting/display logic if needed, or string
+                    "duration": entry.get('duration', "0"),
+                    "type": call_type,
+                    "type_label": type_label,
+                    "name": entry.get('name', None)
+                })
+        
+        # Sort by date (newest first)
+        data.sort(key=lambda x: str(x['date']), reverse=True)
+        return data
+
+    except Exception as e:
+        logger.error(f"Content provider extraction failed: {e}")
         return []
 
 

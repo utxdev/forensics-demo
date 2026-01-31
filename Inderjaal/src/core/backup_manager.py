@@ -114,6 +114,9 @@ class BackupOrchestrator:
                 # The rest is the zlib stream
                 # We need to decompress it. It is a deflate stream.
                 
+                import shutil
+                if os.path.exists(output_dir):
+                    shutil.rmtree(output_dir)
                 os.makedirs(output_dir, exist_ok=True)
                 
                 tar_path = os.path.join(output_dir, "backup.tar")
