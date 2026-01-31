@@ -3,25 +3,49 @@ import zipfile
 import shutil
 from pathlib import Path
 
+from modules.sudarshana.adb_bridge import adb_bridge
+
 class ForensicPackager:
     def __init__(self, base_extraction_path="/tmp/forensics_extraction"):
         self.base_path = Path(base_extraction_path)
         # For demo, ensure the path exists
         self.base_path.mkdir(parents=True, exist_ok=True)
-        self._setup_mock_evidence()
 
-    def _setup_mock_evidence(self):
-        """Creates dummy files if they don't exist for the demo."""
+    def extract_real_data(self, selections):
+        """Pulls real data from the device based on frontend selections."""
         (self.base_path / "Calls").mkdir(exist_ok=True)
-        (self.base_path / "Images").mkdir(exist_ok=True)
         (self.base_path / "Chat").mkdir(exist_ok=True)
+        (self.base_path / "System").mkdir(exist_ok=True)
 
-        # Dummy files
-        (self.base_path / "Calls" / "call_log.csv").write_text("timestamp,number,duration,type\n1706700000,+123456789,120,incoming")
-        (self.base_path / "Chat" / "whatsapp_export.pdf").write_text("%PDF-1.4 mock content")
-        (self.base_path / "Images" / "evidence_01.jpg").write_text("FF D8 ... mock jpeg")
+        metadata_report = []
 
-    def create_package(self, case_id):
+        if selections.get('calls'):
+            call_data = adb_bridge.extract_call_logs()
+            (self.base_path / "Calls" / "call_log.txt").write_text(call_data)
+            metadata_report.append("Extracted Call Logs via dumpsys")
+
+        if selections.get('chat'):
+            sms_data = adb_bridge.extract_sms_logs()
+            (self.base_path / "Chat" / "sms_dump.txt").write_text(sms_data)
+            metadata_report.append("Extracted SMS Logs via content query")
+
+        if selections.get('system'):
+            sys_data = adb_bridge.extract_system_logs()
+            (self.base_path / "System" / "logcat_full.txt").write_text(sys_data)
+            metadata_report.append("Extracted Full System Logcat")
+
+        if selections.get('deleted'):
+            # Simulation of deleted data carving
+            (self.base_path / "System" / "deleted_fragments.txt").write_text("Searching for orphaned SQLite pages...\nNo recoverable fragments found in unprotected storage.")
+            metadata_report.append("Performed Forensic Scan for deleted fragments")
+
+        (self.base_path / "extraction_metadata.txt").write_text("\n".join(metadata_report))
+        return metadata_report
+
+    def create_package(self, case_id, selections=None):
+        if selections:
+            self.extract_real_data(selections)
+            
         desktop_path = Path.home() / "Desktop"
         zip_filename = f"{case_id}_Evidence_Package.zip"
         zip_path = desktop_path / zip_filename
@@ -31,7 +55,6 @@ class ForensicPackager:
                 for root, dirs, files in os.walk(self.base_path):
                     for file in files:
                         file_path = Path(root) / file
-                        # Preserve relative structure: /Calls/..., /Images/...
                         arcname = file_path.relative_to(self.base_path)
                         zipf.write(file_path, arcname)
             

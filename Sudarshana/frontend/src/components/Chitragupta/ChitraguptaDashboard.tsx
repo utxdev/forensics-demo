@@ -39,7 +39,10 @@ const ChitraguptaDashboard: React.FC = () => {
         setLogs(mockLogs);
 
         try {
-            const res = await axios.post('http://localhost:8000/api/chitragupta/generate', metadata);
+            const res = await axios.post('http://localhost:8000/api/chitragupta/generate', {
+                ...metadata,
+                selections
+            });
             setResult(res.data);
 
             // Allow animation to play

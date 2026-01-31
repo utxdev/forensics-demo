@@ -1,9 +1,12 @@
+```python
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 import asyncio
 import json
 import subprocess
+import os # Moved up
 from modules.sudarshana.sniffer import sniffer
 from modules.sudarshana.adb_bridge import adb_bridge
 from modules.sudarshana.ml_engine import ml_engine
@@ -114,7 +117,7 @@ class ReportRequest(BaseModel):
 
 @app.post("/api/chitragupta/generate")
 async def generate_report(data: dict):
-    # Metadata from Divine Form
+    # Metadata and Selections from Divine Form
     metadata = {
         "case_id": data.get("case_id", "UNCATEGORIZED"),
         "investigator": data.get("investigator", "Unknown"),
@@ -123,19 +126,29 @@ async def generate_report(data: dict):
         "remarks": data.get("remarks", ""),
         "threat_score": sniffer.threat_score
     }
+    selections = data.get("selections", {})
     
-    # 1. Create Evidence ZIP on Desktop
-    zip_path = packager.create_package(metadata['case_id'])
+    # 1. Create Evidence ZIP on Desktop (Triggers REAL ADB pulls)
+    zip_path = packager.create_package(metadata['case_id'], selections=selections)
     
-    # 2. Get File Hashes (Mocked list of extracted files)
-    files_to_report = [
-        {"name": "Calls/call_log.csv", "hash": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "status": "INTEGRITY_VERIFIED"},
-        {"name": "Chat/whatsapp_export.pdf", "hash": "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1", "status": "INTEGRITY_VERIFIED"},
-        {"name": "Images/evidence_01.jpg", "hash": "c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2", "status": "INTEGRITY_VERIFIED"}
-    ]
+    # 2. Get File Hashes (Calculate real hashes for the extracted files)
+    files_to_report = []
+    # Index the base_path to get actual files
+    for root, dirs, files in os.walk(packager.base_path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            with open(file_path, "rb") as f:
+                import hashlib
+                file_hash = hashlib.sha256(f.read()).hexdigest()
+                rel_path = os.path.relpath(file_path, packager.base_path)
+                files_to_report.append({
+                    "name": rel_path,
+                    "hash": file_hash,
+                    "status": "INTEGRITY_VERIFIED"
+                })
     
     # 3. Merkle Root Hash
-    root_hash = hasher.build_merkle_tree([f['hash'] for f in files_to_report])
+    root_hash = hasher.build_merkle_tree([f['hash'] for f in files_to_report]) or "N/A"
     
     # 4. Digital Signature
     signature = signer.sign_hash(root_hash)

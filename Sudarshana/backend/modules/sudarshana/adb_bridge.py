@@ -110,6 +110,41 @@ class ADBBridge:
         except:
             return []
 
+    def extract_call_logs(self):
+        """Extracts call logs via dumpsys call_log."""
+        if not self.check_connection():
+            return "Error: No device connected."
+        try:
+            # We use dumpsys call_log as a primary forensic source via ADB
+            result = subprocess.run(["adb", "shell", "dumpsys", "call_log"], capture_output=True, text=True, timeout=5)
+            # In a real scenario, we'd parse this more heavily. For the demo, we'll return the raw dump
+            # and potentially save it to a file later in the packager.
+            return result.stdout if result.stdout.strip() else "No recent call logs found in service dump."
+        except Exception as e:
+            return f"Extraction failed: {str(e)}"
+
+    def extract_sms_logs(self):
+        """Extracts SMS logs via content query (requires content provider access)."""
+        if not self.check_connection():
+            return "Error: No device connected."
+        try:
+            # content query --uri content://sms --projection address,date,body
+            # Note: This might require specific permissions or be blocked on some Android versions
+            result = subprocess.run(["adb", "shell", "content", "query", "--uri", "content://sms"], capture_output=True, text=True, timeout=5)
+            return result.stdout if result.stdout.strip() else "No SMS data found or access denied."
+        except Exception as e:
+            return f"SMS Extraction failed: {str(e)}"
+
+    def extract_system_logs(self):
+        """Provides a complete logcat dump."""
+        if not self.check_connection():
+            return "Error: No device connected."
+        try:
+            result = subprocess.run(["adb", "logcat", "-d"], capture_output=True, text=True, timeout=5)
+            return result.stdout
+        except Exception as e:
+            return f"Log extraction failed: {str(e)}"
+
     def stop(self):
         self.monitoring = False
 
