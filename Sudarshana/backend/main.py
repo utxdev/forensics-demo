@@ -59,8 +59,8 @@ def trigger_attack():
     # 1. Inject Threat Log
     subprocess.run(["adb", "shell", "log", "-t", "MalwareBeacon", "CRITICAL_THREAT: REMOTE SIMULATION TRIGGERED"])
     
-    # 2. visual "Message" on phone (Opens Browser)
-    subprocess.run(["adb", "shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "data:text/html,<body style='background:red;color:white;font-size:50px;display:flex;justify-content:center;align-items:center;height:100vh'><h1>MALWARE TRIGGERED<br>THREAT LEVEL: CRITICAL</h1></body>"])
+    # 2. Show simple notification on phone
+    subprocess.run(["adb", "shell", "am", "broadcast", "-a", "android.intent.action.SHOW_TEXT", "-e", "text", "⚠️ MALWARE TRIGGERED - THREAT LEVEL: CRITICAL"])
     
     return {"status": "triggered"}
 

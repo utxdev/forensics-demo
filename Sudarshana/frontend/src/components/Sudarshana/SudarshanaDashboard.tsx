@@ -20,7 +20,7 @@ const SudarshanaDashboard: React.FC = () => {
     const threatLevel = status.threat_score > 50 ? 'high' : status.threat_score > 10 ? 'medium' : 'low';
 
     return (
-        <div className="h-full w-full p-8 grid grid-cols-12 gap-6">
+        <div className="h-full w-full p-4 grid grid-cols-12 gap-4">
             {/* Header */}
             <div className="col-span-12 flex justify-between items-center border-b border-white/10 pb-4 mb-4 relative">
                 <h1 className="text-4xl text-yellow-400 mythic-font glow-text">SUDARSHANA <span className="text-sm font-sans text-cyan-400 tracking-widest ml-4">THREAT DEFENSE MATRIX</span></h1>
@@ -48,7 +48,7 @@ const SudarshanaDashboard: React.FC = () => {
             </div>
 
             {/* Main Radar Area */}
-            <div className="col-span-12 lg:col-span-5 flex flex-col items-center justify-center cyber-panel min-h-[500px] relative overflow-hidden">
+            <div className="col-span-12 lg:col-span-5 flex flex-col items-center justify-center cyber-panel min-h-[350px] relative overflow-hidden p-4">
                 <ChakraRadar threatLevel={threatLevel} isScanning={true} />
                 <div className="absolute bottom-4 left-4 text-xs text-white/50 font-mono">
                     <p>ROTATION_SPEED: {threatLevel === 'high' ? 'MAX' : 'NORM'}</p>
