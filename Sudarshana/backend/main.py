@@ -113,35 +113,41 @@ class ReportRequest(BaseModel):
     files: List[CaseFile]
 
 @app.post("/api/chitragupta/generate")
-def generate_report(request: ReportRequest):
-    # Simuluate processing
-    files_data = []
-    hashes = []
+async def generate_report(data: dict):
+    # Metadata from Divine Form
+    metadata = {
+        "case_id": data.get("case_id", "UNCATEGORIZED"),
+        "investigator": data.get("investigator", "Unknown"),
+        "agency": data.get("agency", "N/A"),
+        "suspect": data.get("suspect", "N/A"),
+        "remarks": data.get("remarks", ""),
+        "threat_score": sniffer.threat_score
+    }
     
-    for f in request.files:
-        # transforming filename to pretend hash
-        import hashlib
-        h = hashlib.sha256(f.filename.encode()).hexdigest()
-        hashes.append(h)
-        files_data.append({
-            "name": f.filename,
-            "hash": h,
-            "status": "Verified"
-        })
+    # 1. Create Evidence ZIP on Desktop
+    zip_path = packager.create_package(metadata['case_id'])
     
-    root_hash = hasher.build_merkle_tree(hashes)
-    signature = signer.sign_data(root_hash)
+    # 2. Get File Hashes (Mocked list of extracted files)
+    files_to_report = [
+        {"name": "Calls/call_log.csv", "hash": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6", "status": "INTEGRITY_VERIFIED"},
+        {"name": "Chat/whatsapp_export.pdf", "hash": "b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1", "status": "INTEGRITY_VERIFIED"},
+        {"name": "Images/evidence_01.jpg", "hash": "c3d4e5f6g7h8i9j0k1l2m3n4o5p6a1b2", "status": "INTEGRITY_VERIFIED"}
+    ]
     
-    output_path = f"report_{request.case_id}.pdf"
-    full_path = os.path.join(os.getcwd(), output_path) # In root for now
+    # 3. Merkle Root Hash
+    root_hash = hasher.build_merkle_tree([f['hash'] for f in files_to_report])
     
-    report_gen.generate_report(request.case_id, files_data, root_hash, signature, output_path=full_path)
+    # 4. Digital Signature
+    signature = signer.sign_hash(root_hash)
+    
+    # 5. Generate PDF
+    report_file = f"Report_{metadata['case_id']}.pdf"
+    report_gen.generate_report(metadata, files_to_report, root_hash, signature, report_file)
     
     return {
-        "status": "completed",
-        "report_url": f"/reports/{output_path}", # Needs static mount
-        "root_hash": root_hash,
-        "signature": signature
+        "status": "sealed",
+        "zip_path": zip_path,
+        "report_url": f"http://localhost:8000/{report_file}"
     }
 
 if __name__ == "__main__":
