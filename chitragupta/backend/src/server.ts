@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Middleware
 app.use(cors());
@@ -20,6 +20,7 @@ app.use(express.json());
 
 // Storage Setup
 const uploadDir = path.join(__dirname, '../uploads');
+const metadataFile = path.join(uploadDir, 'metadata.json');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -41,6 +42,33 @@ interface ForensicFile {
 
 // In-memory 'database' for this session
 const uploadedFiles = new Map<string, ForensicFile>();
+
+// Persistence functions
+function loadMetadata() {
+    try {
+        if (fs.existsSync(metadataFile)) {
+            const data = JSON.parse(fs.readFileSync(metadataFile, 'utf-8'));
+            Object.entries(data).forEach(([id, file]) => {
+                uploadedFiles.set(id, file as ForensicFile);
+            });
+            console.log(`✓ Loaded ${uploadedFiles.size} files from metadata`);
+        }
+    } catch (e) {
+        console.error('Error loading metadata:', e);
+    }
+}
+
+function saveMetadata() {
+    try {
+        const data = Object.fromEntries(uploadedFiles);
+        fs.writeFileSync(metadataFile, JSON.stringify(data, null, 2));
+    } catch (e) {
+        console.error('Error saving metadata:', e);
+    }
+}
+
+// Load on startup
+loadMetadata();
 
 // --- Routes ---
 
@@ -82,6 +110,7 @@ app.post('/api/upload', upload.array('files'), (req, res) => {
             processedFiles.push(forensicFile);
         });
 
+        saveMetadata(); // Persist to disk
         res.json({ message: 'Artifacts received and hashed', files: processedFiles });
     } catch (error) {
         console.error('Upload error:', error);
@@ -106,9 +135,22 @@ app.post('/api/generate-report', async (req, res) => {
             }
         }
 
+        // If no valid files from provided IDs, use ALL available files
+        if (selectedFiles.length === 0 && uploadedFiles.size > 0) {
+            console.log(`No valid file IDs provided, using all ${uploadedFiles.size} available files`);
+            uploadedFiles.forEach(file => {
+                selectedFiles.push(file);
+                hashes.push(file.currentHash);
+            });
+        } else if (selectedFiles.length === 0) {
+            console.log(`ERROR: No files in memory. uploadedFiles.size = ${uploadedFiles.size}`);
+        }
+
         if (selectedFiles.length === 0) {
             return res.status(400).json({ error: 'No valid files selected for report' });
         }
+
+        console.log(`Generating report for ${selectedFiles.length} files...`);
 
         // 1. Calculate Merkle Root
         const merkleRoot = CryptoService.calculateMerkleRoot(hashes);
@@ -151,39 +193,51 @@ app.post('/api/generate-report', async (req, res) => {
     }
 });
 
-// --- ADB Routes ---
+// --- Pipeline ADB Routes ---
 
-// Check device status
-app.get('/api/device/status', async (req, res) => {
-    // We can call generic adb devices command or use a python wrapper
-    // For simplicity, let's spawn a quick check or use the python bridge status if we expose it via an API
-    // Actually, let's use a simple shell command here for speed, or we could extend the python architecture
-    // Since adb_bridge is a python script, we might want to interact with it via child_process or just run adb directly for simple things.
-    // Let's run adb directly for status to be fast.
-    const { exec } = await import('child_process');
-    exec('adb devices', (error, stdout, stderr) => {
-        if (error) {
-            return res.json({ connected: false, error: stderr });
+// Stage 1: Handshake (Python)
+app.get('/api/data-pipeline/handshake', async (req, res) => {
+    const { spawn } = await import('child_process');
+    // Using a one-off python script to call the wrapper class method
+    // We basically need to instantiate ADBBridge and call get_device_details
+    const pythonScript = `
+import sys
+sys.path.append('${path.join(__dirname, '../python_engine')}')
+from pipeline_wrapper import ADBBridge
+import json
+
+bridge = ADBBridge()
+details = bridge.get_device_details()
+print(json.dumps(details))
+`;
+
+    const pythonProcess = spawn('python3', ['-c', pythonScript]);
+
+    let dataBuffer = '';
+    pythonProcess.stdout.on('data', (data) => {
+        dataBuffer += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Python Error: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+        try {
+            // Find the JSON part in stdout (ignore 'Device Handshake Complete' logs)
+            const lines = dataBuffer.trim().split('\n');
+            const jsonLine = lines[lines.length - 1];
+            const details = JSON.parse(jsonLine);
+            res.json(details || { connected: false });
+        } catch (e) {
+            res.status(500).json({ error: 'Handshake failed', raw: dataBuffer });
         }
-        const lines = stdout.split('\n');
-        let connected = false;
-        for (let i = 1; i < lines.length; i++) {
-            if (lines[i].includes('device') && lines[i].trim().length > 0) {
-                connected = true;
-                break;
-            }
-        }
-        res.json({ connected });
     });
 });
 
-// List files
+// Helper for listing files (keep using simple ADB shell for speed in browsing)
 app.get('/api/device/files', async (req, res) => {
     const path = req.query.path as string || '/sdcard';
-    const { spawn } = await import('child_process');
-
-    // We'll use a one-off python script execution or just adb shell ls
-    // Let's try direct adb shell ls for simplicity and speed, parsing it similar to python
     const { exec } = await import('child_process');
     exec(`adb shell ls -p "${path}"`, (error, stdout, stderr) => {
         if (error) {
@@ -201,52 +255,72 @@ app.get('/api/device/files', async (req, res) => {
     });
 });
 
-// Pull and ingest file
-app.post('/api/device/pull', async (req, res) => {
+
+// Stage 2: Extraction & Immediate Hash (Python)
+app.post('/api/data-pipeline/pull', async (req, res) => {
     const { filePath } = req.body;
     if (!filePath) return res.status(400).json({ error: 'No file path provided' });
 
     const fileName = filePath.split('/').pop();
     const destPath = path.join(uploadDir, fileName);
 
-    const { exec } = await import('child_process');
-    exec(`adb pull "${filePath}" "${destPath}"`, (error, stdout, stderr) => {
-        if (error) {
-            console.error('Pull error:', stderr);
-            return res.status(500).json({ error: 'Failed to pull file from device', details: stderr });
-        }
+    const { spawn } = await import('child_process');
+    const pythonScript = `
+import sys
+sys.path.append('${path.join(__dirname, '../python_engine')}')
+from pipeline_wrapper import ADBBridge
+import json
 
-        // Now ingest it into our forensic system (hash it, etc)
+bridge = ADBBridge()
+result = bridge.pull_file_with_hash('${filePath}', '${destPath}')
+print(json.dumps(result))
+`;
+
+    const pythonProcess = spawn('python3', ['-c', pythonScript]);
+
+    let dataBuffer = '';
+    pythonProcess.stdout.on('data', (data) => {
+        dataBuffer += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
         try {
-            const buffer = fs.readFileSync(destPath);
-            const hash = CryptoService.generateHash(buffer);
-            const id = crypto.randomUUID();
+            const lines = dataBuffer.trim().split('\n');
+            const jsonLine = lines[lines.length - 1]; // Last line should be our JSON
+            const result = JSON.parse(jsonLine);
 
-            const stats = fs.statSync(destPath);
+            if (result.success && result.success !== 'False') { // Python might serialize True/False differently depending on dumps, usually true/false
+                // Ingest into memory
+                const buffer = fs.readFileSync(destPath);
+                const id = crypto.randomUUID();
 
-            const forensicFile: ForensicFile = {
-                id,
-                name: fileName,
-                size: stats.size,
-                type: 'application/octet-stream', // Generic
-                extractedAt: new Date(),
-                currentHash: hash,
-                originalHash: hash, // Assumed "original" as it came from device
-                verified: true,
-                metadata: {
-                    path: 'device://' + filePath,
-                    pullLog: stdout
-                }
-            };
-
-            uploadedFiles.set(id, forensicFile);
-            res.json({ message: 'File pulled and secured', file: forensicFile });
-
-        } catch (err) {
-            console.error('Ingestion error:', err);
-            res.status(500).json({ error: 'Failed to ingest file after pull' });
+                const forensicFile: ForensicFile = {
+                    id,
+                    name: fileName,
+                    size: fs.statSync(destPath).size,
+                    type: 'application/octet-stream',
+                    extractedAt: new Date(),
+                    currentHash: result.hash,
+                    originalHash: result.hash, // The Stage 2 Immediate Hash
+                    verified: true,
+                    metadata: {
+                        path: 'device://' + filePath,
+                        pullLog: result.logs,
+                        custodyTimestamp: result.timestamp
+                    }
+                };
+                uploadedFiles.set(id, forensicFile);
+                saveMetadata(); // Persist to disk
+                res.json({ message: 'Extraction Complete', file: forensicFile, details: result });
+            } else {
+                res.status(500).json({ error: result.error || 'Pull failed' });
+            }
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ error: 'Pipeline Extraction Logic Failed', raw: dataBuffer });
         }
     });
+
 });
 
 app.listen(PORT, () => {
