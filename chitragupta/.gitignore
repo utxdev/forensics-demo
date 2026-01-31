@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Forensic Data
+backend/uploads/
+backend/metadata.json
+backend/python_engine/venv/
+backend/generate-metadata.js
+
