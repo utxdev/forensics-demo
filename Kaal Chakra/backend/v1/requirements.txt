@@ -1,0 +1,4 @@
+flask
+flask-cors
+pure-python-adb
+pillow
