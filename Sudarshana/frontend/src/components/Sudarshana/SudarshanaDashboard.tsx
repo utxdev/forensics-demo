@@ -48,7 +48,7 @@ const SudarshanaDashboard: React.FC = () => {
             </div>
 
             {/* Main Radar Area */}
-            <div className="col-span-12 lg:col-span-5 flex flex-col items-center justify-center cyber-panel min-h-[350px] relative overflow-hidden p-4">
+            <div className="col-span-12 lg:col-span-5 flex flex-col items-center justify-start cyber-panel h-[500px] max-h-[500px] relative overflow-hidden p-8 pt-16">
                 <ChakraRadar threatLevel={threatLevel} isScanning={true} />
                 <div className="absolute bottom-4 left-4 text-xs text-white/50 font-mono">
                     <p>ROTATION_SPEED: {threatLevel === 'high' ? 'MAX' : 'NORM'}</p>
@@ -56,8 +56,8 @@ const SudarshanaDashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Live Feed & Stats */}
-            <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
+            {/* Right Column: Stats + Feed */}
+            <div className="col-span-12 lg:col-span-7 flex flex-col gap-4 h-[500px] max-h-[500px]">
                 {/* Stats Row */}
                 <div className="grid grid-cols-3 gap-4">
                     <div className="bg-blue-900/20 p-4 border border-blue-500/30 rounded">
@@ -75,7 +75,7 @@ const SudarshanaDashboard: React.FC = () => {
                 </div>
 
                 {/* Packet Log */}
-                <div className="flex-1 cyber-panel p-4 overflow-hidden flex flex-col">
+                <div className="flex-1 cyber-panel p-4 flex flex-col overflow-hidden">
                     <h3 className="text-yellow-500 mb-4 flex items-center gap-2"><Wifi size={16} /> LIVE TRAFFIC INTERCEPT</h3>
                     <div className="flex-1 overflow-y-auto font-mono text-xs space-y-2 pr-2">
                         {status.recent_packets?.map((pkt: any, i: number) => (
