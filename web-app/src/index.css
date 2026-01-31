@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-cyber-black text-cyber-text font-sans antialiased;
+        background-image: radial-gradient(circle at 50% 0%, #1a1a24 0%, #0a0a0f 70%);
+    }
+}
+
+.cyber-border {
+    @apply border border-cyber-primary/30 shadow-[0_0_10px_rgba(0,240,255,0.1)];
+}
+
+.cyber-card {
+    @apply bg-cyber-panel/50 backdrop-blur-md border border-white/5 rounded-lg p-4;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-cyber-dark;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-cyber-panel rounded hover:bg-cyber-dim;
+}

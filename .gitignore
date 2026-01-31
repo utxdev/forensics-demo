@@ -1,0 +1,26 @@
+# Dependencies
+venv/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Build output
+dist/
+build/
+
+# Extracted Data (Privacy Protection)
+extracted_sessions/
+extracted_media/
+*.ab
+*.db
+
+# Data JSONs (Contains Real User Data)
+sms_messages.json
+location_history.json
+call_logs.json
+app_data.json
+extracted_media.json
+
+# Environment variables
+.env

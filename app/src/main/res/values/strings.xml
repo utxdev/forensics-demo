@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Gandiva</string>
+    <string name="start_extraction">Start Extraction</string>
+    <string name="extraction_running">Extracting Data...</string>
+    <string name="extraction_complete">Extraction Complete</string>
+    <string name="vault_secure">Secure Vault</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_rationale">This app needs access to SMS, Media, and Location to perform forensic extraction.</string>
+</resources>
