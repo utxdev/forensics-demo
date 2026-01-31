@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-space-black: #050505;
+  --color-deep-void: #0a0a12;
+  --color-cosmic-blue: #1a1a2e;
+  --color-vedic-gold: #FFD700;
+  --color-vedic-gold-dim: #C5A000;
+  --color-vedic-gold-glow: #FFE55C;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-magenta: #FF003C;
+
+  --font-orbitron: "Orbitron", sans-serif;
+  --font-cinzel: "Cinzel", serif;
+  --font-inter: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --shadow-gold-glow: 0 0 15px rgba(255, 215, 0, 0.3);
+  --shadow-neon-glow: 0 0 10px rgba(0, 240, 255, 0.5);
+
+  --image-radial-space: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #000000 100%);
+  --image-cyber-grid: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+}
+
+@layer base {
+  body {
+    @apply bg-space-black text-white font-inter overflow-hidden;
+    background-image: var(--image-radial-space);
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-deep-void/60 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/5 rounded-lg transition-all duration-300 hover:bg-white/10 hover:border-vedic-gold/30 hover:shadow-gold-glow;
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
