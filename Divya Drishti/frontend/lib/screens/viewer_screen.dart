@@ -87,6 +87,53 @@ class _ViewerScreenState extends State<ViewerScreen> {
     }
   }
 
+  Future<void> _checkVirusTotal() async {
+    if (_analysisResult == null) return;
+    
+    setState(() => _isAnalyzing = true);
+    try {
+        final fileId = _analysisResult!['file_id'];
+        var response = await http.post(Uri.parse('$_backendUrl/sandbox/$fileId'));
+        
+        if (response.statusCode == 200) {
+            final vtResult = jsonDecode(response.body);
+            if (!mounted) return;
+            showDialog(
+              context: context, 
+              builder: (_) => AlertDialog(
+                backgroundColor: Colors.black87,
+                title: Text("VIRUSTOTAL SANDBOX REPORT", style: GoogleFonts.rajdhani(color: Colors.cyanAccent, fontWeight: FontWeight.bold)),
+                content: SizedBox(
+                  width: double.maxFinite,
+                  child: SingleChildScrollView(
+                    child: Text(
+                      const JsonEncoder.withIndent('  ').convert(vtResult),
+                      style: GoogleFonts.robotoMono(color: Colors.white70, fontSize: 12),
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context), 
+                    child: Text("CLOSE", style: TextStyle(color: Theme.of(context).primaryColor))
+                  )
+                ]
+              )
+            );
+        } else {
+             if (!mounted) return;
+             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('VT Error: ${response.body}')));
+        }
+    } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error connecting to backend: $e')));
+    } finally {
+        if (mounted) {
+          setState(() => _isAnalyzing = false);
+        }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +161,20 @@ class _ViewerScreenState extends State<ViewerScreen> {
               onPressed: _pickFile,
             ),
           ),
+          if (_analysisResult != null)
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.redAccent.withOpacity(0.8)),
+                color: Colors.redAccent.withOpacity(0.1),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.shield_outlined),
+                tooltip: "VIRUSTOTAL SANDBOX ANALYSIS",
+                color: Colors.redAccent,
+                onPressed: _checkVirusTotal,
+              ),
+            ),
         ],
       ),
       body: Stack(

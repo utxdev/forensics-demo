@@ -7,6 +7,7 @@ numpy
 exifread
 piexif
 ffmpeg-python
-python-magic
+python-magic-bin
 httpx
 pytest
+python-dotenv

@@ -13,3 +13,32 @@
 2026-01-31 20:30:14,486 - File Uploaded: suspicious_stego.jpg (ID: 97041cdb-60a6-400b-b949-b3e9c847b411) from IP: 127.0.0.1
 2026-01-31 20:30:28,503 - File Uploaded: clean_evidence.jpg (ID: dcd2c19d-4186-48e2-ad5f-caf8b3bc1706) from IP: 127.0.0.1
 2026-01-31 20:30:49,632 - File Uploaded: suspicious_stego.jpg (ID: 8c4478a9-59b3-4726-aea7-d4b324ffbbd1) from IP: 127.0.0.1
+2026-02-01 03:33:20,983 - File Uploaded: calllog+spamfilter.apk (ID: c362ad0c-465e-4938-9260-ff3b3007704f) from IP: 127.0.0.1
+2026-02-01 03:33:38,680 - Starting Sandbox Analysis for c362ad0c-465e-4938-9260-ff3b3007704f
+2026-02-01 03:33:39,053 - Checking VT for hash: 3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede
+2026-02-01 03:33:40,035 - HTTP Request: GET https://www.virustotal.com/api/v3/files/3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede "HTTP/1.1 404 Not Found"
+2026-02-01 03:33:40,036 - File not found in VT. Uploading...
+2026-02-01 03:34:52,875 - HTTP Request: POST https://www.virustotal.com/api/v3/files "HTTP/1.1 413 Request Entity Too Large"
+2026-02-01 03:36:25,234 - File Uploaded: calllog+spamfilter.apk (ID: 19f9cbc3-93d5-4a2b-a45c-1fa3926f7694) from IP: 127.0.0.1
+2026-02-01 03:36:26,788 - Starting Sandbox Analysis for 19f9cbc3-93d5-4a2b-a45c-1fa3926f7694
+2026-02-01 03:36:27,054 - Checking VT for hash: 3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede
+2026-02-01 03:36:27,964 - HTTP Request: GET https://www.virustotal.com/api/v3/files/3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede "HTTP/1.1 404 Not Found"
+2026-02-01 03:36:27,964 - File not found in VT. Uploading...
+2026-02-01 03:37:27,447 - HTTP Request: POST https://www.virustotal.com/api/v3/files "HTTP/1.1 413 Request Entity Too Large"
+2026-02-01 03:39:26,449 - File Uploaded: app-release.apk (ID: 5c86bb93-66c9-41d6-b5b1-bd2cbb752554) from IP: 127.0.0.1
+2026-02-01 03:39:27,520 - Starting Sandbox Analysis for 5c86bb93-66c9-41d6-b5b1-bd2cbb752554
+2026-02-01 03:39:27,823 - Checking VT for hash: 26c3ced82de2a315ba7e53db18ccdba022a189d93e31d3b662800239f6492eb9
+2026-02-01 03:39:28,459 - HTTP Request: GET https://www.virustotal.com/api/v3/files/26c3ced82de2a315ba7e53db18ccdba022a189d93e31d3b662800239f6492eb9 "HTTP/1.1 404 Not Found"
+2026-02-01 03:39:28,460 - File not found in VT. Uploading...
+2026-02-01 03:39:33,704 - Starting Sandbox Analysis for 19f9cbc3-93d5-4a2b-a45c-1fa3926f7694
+2026-02-01 03:39:33,962 - Checking VT for hash: 3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede
+2026-02-01 03:39:35,150 - HTTP Request: GET https://www.virustotal.com/api/v3/files/3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede "HTTP/1.1 404 Not Found"
+2026-02-01 03:39:35,151 - File not found in VT. Uploading...
+2026-02-01 03:39:41,585 - File Uploaded: resume (2).pdf (ID: f63e508a-11bb-404e-8320-f31ec085d5ac) from IP: 127.0.0.1
+2026-02-01 03:39:42,713 - Starting Sandbox Analysis for f63e508a-11bb-404e-8320-f31ec085d5ac
+2026-02-01 03:39:42,967 - Checking VT for hash: 586bdfaf758aafd74298a019f3906e142a173cfffd4b9cd9ee3bb18a86b50e45
+2026-02-01 03:39:43,340 - Sandbox Error: 
+2026-02-01 03:39:48,134 - HTTP Request: GET https://www.virustotal.com/api/v3/files/586bdfaf758aafd74298a019f3906e142a173cfffd4b9cd9ee3bb18a86b50e45 "HTTP/1.1 200 OK"
+2026-02-01 03:39:48,135 - File found in VT. Fetching details.
+2026-02-01 03:39:49,344 - HTTP Request: GET https://www.virustotal.com/api/v3/files/586bdfaf758aafd74298a019f3906e142a173cfffd4b9cd9ee3bb18a86b50e45/behaviours "HTTP/1.1 200 OK"
+2026-02-01 03:40:51,906 - HTTP Request: POST https://www.virustotal.com/api/v3/files "HTTP/1.1 413 Request Entity Too Large"

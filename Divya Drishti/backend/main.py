@@ -1,8 +1,13 @@
+from dotenv import load_dotenv
+import os
+
+# Load environment variables immediately
+load_dotenv()
+
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import shutil
-import os
 import uuid
 import logging
 from datetime import datetime
@@ -11,6 +16,7 @@ from typing import List
 from analysis.metadata import extract_metadata, calculate_hashes
 from analysis.stego import detect_steganography
 from analysis.vision import detect_faces
+from analysis.virustotal import get_vt_analysis
 
 # Setup Logging
 logging.basicConfig(
@@ -65,6 +71,26 @@ async def analyze_file(request: Request, file: UploadFile = File(...)):
         
     except Exception as e:
         logging.error(f"Error analyzing file: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/sandbox/{file_id}")
+async def sandbox_analysis(file_id: str):
+    # Find file with any extension
+    found_file = None
+    for f in os.listdir(UPLOAD_DIR):
+        if f.startswith(file_id):
+            found_file = os.path.join(UPLOAD_DIR, f)
+            break
+            
+    if not found_file:
+        raise HTTPException(status_code=404, detail="File not found")
+
+    try:
+        logging.info(f"Starting Sandbox Analysis for {file_id}")
+        result = await get_vt_analysis(found_file)
+        return JSONResponse(content=result)
+    except Exception as e:
+        logging.error(f"Sandbox Error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/hex/{file_id}")
