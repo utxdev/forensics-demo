@@ -8,6 +8,7 @@ class ADBBridge:
     def __init__(self):
         self.device_connected = False
         self.logs = []
+        self.interesting_events = []
         self.lock = threading.Lock()
         self.monitoring = False
 
@@ -45,19 +46,42 @@ class ADBBridge:
             ["adb", "logcat", "-v", "time"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            errors='replace' # Fix UnicodeDecodeError crash
         )
         
         while self.monitoring:
             line = process.stdout.readline()
             if not line:
                 break
-            with self.lock:
-                self.logs.append(line.strip())
-                if len(self.logs) > 1000: # Keep last 1000 lines
-                    self.logs.pop(0)
+            
+            # User requested "literally everything".
+            # To prevent UI crash, we'll still buffer, but allow ALL non-empty lines through.
+            line_str = line.strip()
+            if not line_str:
+                continue
 
-    def get_latest_logs(self, n=50):
+            with self.lock:
+                self.logs.append(line_str)
+                if len(self.logs) > 2000:
+                    self.logs.pop(0)
+                
+                # Push EVERYTHING to the feed.
+                # The Dashboard will just scroll fast if it's spammy.
+                self.interesting_events.append({
+                    "timestamp": time.time(),
+                    "raw": line_str,
+                    "type": "system"
+                })
+                if len(self.interesting_events) > 500: # Increase buffer
+                    self.interesting_events.pop(0)
+
+    def get_interesting_events(self):
+        with self.lock:
+            # Return larger slice for continuous feel
+            return list(self.interesting_events)[-100:]
+
+    def get_latest_logs(self, n=100):
         with self.lock:
             return self.logs[-n:]
 

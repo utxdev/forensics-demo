@@ -22,8 +22,19 @@ const SudarshanaDashboard: React.FC = () => {
     return (
         <div className="h-full w-full p-8 grid grid-cols-12 gap-6">
             {/* Header */}
-            <div className="col-span-12 flex justify-between items-center border-b border-white/10 pb-4 mb-4">
+            <div className="col-span-12 flex justify-between items-center border-b border-white/10 pb-4 mb-4 relative">
                 <h1 className="text-4xl text-yellow-400 mythic-font glow-text">SUDARSHANA <span className="text-sm font-sans text-cyan-400 tracking-widest ml-4">THREAT DEFENSE MATRIX</span></h1>
+
+                {/* Trigger Button */}
+                <button
+                    onClick={async () => {
+                        await fetch('http://localhost:8000/api/sudarshana/trigger_attack', { method: 'POST' });
+                    }}
+                    className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded border border-red-400 shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-all hover:scale-105 active:scale-95 z-50 animate-pulse"
+                >
+                    ⚠ TRIGGER MALWARE
+                </button>
+
                 <div className="flex gap-4">
                     <div className="flex items-center gap-2 text-cyan-300">
                         <Activity size={18} />
@@ -51,11 +62,11 @@ const SudarshanaDashboard: React.FC = () => {
                 <div className="grid grid-cols-3 gap-4">
                     <div className="bg-blue-900/20 p-4 border border-blue-500/30 rounded">
                         <h3 className="text-cyan-400 text-sm mb-1">THREAT SCORE</h3>
-                        <p className="text-3xl font-bold text-white">{status.threat_score}</p>
+                        <p className={`text-3xl font-bold ${status.threat_score > 50 ? 'text-red-500 animate-pulse' : 'text-white'}`}>{status.threat_score}</p>
                     </div>
                     <div className="bg-blue-900/20 p-4 border border-blue-500/30 rounded">
-                        <h3 className="text-cyan-400 text-sm mb-1">PACKETS SCANNED</h3>
-                        <p className="text-3xl font-bold text-white">{(status.recent_packets?.length || 0) * 123 + 450}</p> {/* Demo filler math */}
+                        <h3 className="text-cyan-400 text-sm mb-1">EVENTS SCANNED</h3>
+                        <p className="text-3xl font-bold text-white">{status.total_scanned || 0}</p>
                     </div>
                     <div className="bg-blue-900/20 p-4 border border-blue-500/30 rounded">
                         <h3 className="text-cyan-400 text-sm mb-1">ACTIVE NODES</h3>
@@ -68,7 +79,7 @@ const SudarshanaDashboard: React.FC = () => {
                     <h3 className="text-yellow-500 mb-4 flex items-center gap-2"><Wifi size={16} /> LIVE TRAFFIC INTERCEPT</h3>
                     <div className="flex-1 overflow-y-auto font-mono text-xs space-y-2 pr-2">
                         {status.recent_packets?.map((pkt: any, i: number) => (
-                            <div key={i} className={`p-2 border-l-2 ${pkt.threat ? 'border-red-500 bg-red-900/20' : 'border-cyan-500 bg-cyan-900/10'}`}>
+                            <div key={`pkt-${i}`} className={`p-2 border-l-2 ${pkt.threat ? 'border-red-500 bg-red-900/20' : 'border-cyan-500 bg-cyan-900/10'}`}>
                                 <div className="flex justify-between text-white/70">
                                     <span>{pkt.src} &rarr; {pkt.dst}</span>
                                     <span>{pkt.protocol}</span>
@@ -76,8 +87,20 @@ const SudarshanaDashboard: React.FC = () => {
                                 <div className="text-white/40 mt-1 truncate">{pkt.info || `Len: ${pkt.length}`}</div>
                             </div>
                         ))}
+
+                        {/* Render System Events */}
+                        {status.system_events?.map((evt: any, i: number) => (
+                            <div key={`sys-${i}`} className="p-2 border-l-2 border-amber-500 bg-amber-900/10">
+                                <div className="flex justify-between text-white/70">
+                                    <span className="text-amber-400">SYS_EVENT</span>
+                                    <span>{new Date(evt.timestamp * 1000).toLocaleTimeString()}</span>
+                                </div>
+                                <div className="text-white/60 mt-1 truncate font-bold">{evt.raw}</div>
+                            </div>
+                        ))}
+
                         {/* Fallback empty state */}
-                        {!status.recent_packets?.length && <div className="text-center text-white/30 mt-10">Waiting for intercept...</div>}
+                        {(!status.recent_packets?.length && !status.system_events?.length) && <div className="text-center text-white/30 mt-10">Waiting for activity...<br />(Connect device & toggle WiFi/BT)</div>}
                     </div>
                 </div>
             </div>

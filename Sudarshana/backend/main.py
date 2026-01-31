@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import asyncio
 import json
+import subprocess
 from modules.sudarshana.sniffer import sniffer
 from modules.sudarshana.adb_bridge import adb_bridge
 from modules.sudarshana.ml_engine import ml_engine
@@ -50,6 +51,19 @@ def get_sudarshana_status():
 def get_graph_data():
     return graph_engine.get_graph_data()
 
+@app.post("/api/sudarshana/trigger_attack")
+def trigger_attack():
+    # 0. Wake Screen
+    subprocess.run(["adb", "shell", "input", "keyevent", "KEYCODE_WAKEUP"])
+
+    # 1. Inject Threat Log
+    subprocess.run(["adb", "shell", "log", "-t", "MalwareBeacon", "CRITICAL_THREAT: REMOTE SIMULATION TRIGGERED"])
+    
+    # 2. visual "Message" on phone (Opens Browser)
+    subprocess.run(["adb", "shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "data:text/html,<body style='background:red;color:white;font-size:50px;display:flex;justify-content:center;align-items:center;height:100vh'><h1>MALWARE TRIGGERED<br>THREAT LEVEL: CRITICAL</h1></body>"])
+    
+    return {"status": "triggered"}
+
 @app.websocket("/ws/sudarshana")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
@@ -57,33 +71,29 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             # Send real-time updates
             packets = sniffer.get_latest_packets(5) if hasattr(sniffer, 'get_latest_packets') else sniffer.get_packets()[-5:]
-            logs = adb_bridge.get_latest_logs(5)
             
-            # Anomaly check
-            anomaly = False
-            # Check latest logs for keywords
-            for log in logs:
-                if "SmsManager" in log or "ActivityManager" in log:
-                    pass
-                
-                # Manual Trigger for Demo
+            # Fetch interesting system events (Bluetooth, Wifi, Threat Logs)
+            system_events = adb_bridge.get_interesting_events()
+            
+            # Also check for manual trigger in the FULL logs buffer
+            all_logs = adb_bridge.get_latest_logs(100)
+            for log in all_logs:
                 if "TEST_THREAT" in log or "MalwareBeacon" in log:
-                    sniffer.threat_score = 100
-                    anomaly = True
-
-                if "error" in log.lower() or "fail" in log.lower():
-                    # Boost threat score on device errors
                     if sniffer.threat_score < 100:
-                        sniffer.threat_score += 1
+                         sniffer.threat_score = 100
+            
+            # Count total "scanned items" (packets + logs)
+            total_scanned = len(sniffer.captured_packets) + len(adb_bridge.logs)
 
             data = {
                 "threat_score": sniffer.threat_score,
                 "recent_packets": packets,
-                "recent_logs": logs,
+                "system_events": system_events,
+                "total_scanned": total_scanned, # New Metric
                 "device_connected": adb_bridge.check_connection()
             }
             await websocket.send_json(data)
-            await asyncio.sleep(1) # 1Hz update
+            await asyncio.sleep(0.05) # 20Hz high-speed update
     except WebSocketDisconnect:
         print("Client disconnected")
 
