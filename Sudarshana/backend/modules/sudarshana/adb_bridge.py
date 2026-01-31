@@ -3,6 +3,13 @@ import shlex
 import threading
 import time
 import re
+import os
+import shutil
+from .vt_scanner import VirusTotalScanner
+from dotenv import load_dotenv
+
+load_dotenv()
+VT_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 
 class ADBBridge:
     def __init__(self):
@@ -12,7 +19,16 @@ class ADBBridge:
         self.lock = threading.Lock()
         self.monitoring = False
         self.monitor_thread = None
+    def __init__(self):
+        self.device_connected = False
+        self.logs = []
+        self.interesting_events = []
+        self.lock = threading.Lock()
+        self.monitoring = False
+        self.monitor_thread = None
         self.previous_connection_state = False  # Track previous connection state
+        self.vt_scanner = VirusTotalScanner(VT_API_KEY) if VT_API_KEY else None
+
 
     def check_connection(self):
         """Checks if a device is connected via ADB."""
@@ -187,6 +203,60 @@ class ADBBridge:
         except Exception as e:
              print(f"System extraction error: {e}")
              return []
+
+    def scan_device_file(self, remote_path):
+        """Scans a file on the device using VirusTotal."""
+        if not self.check_connection():
+            return {"error": "Device not connected"}
+        if not self.vt_scanner:
+            return {"error": "VirusTotal API Key not configured"}
+
+        try:
+            print(f"Scanning remote file: {remote_path}")
+            
+            # 1. Calculate Hash on Device (avoid pulling if we don't need to)
+            # Use sha256sum if available
+            result = subprocess.run(["adb", "shell", "sha256sum", f"'{remote_path}'"], capture_output=True, text=True)
+            output = result.stdout.strip()
+            
+            file_hash = None
+            if output and "No such file" not in output:
+                parts = output.split()
+                if parts:
+                    file_hash = parts[0]
+            
+            if file_hash and len(file_hash) == 64:
+                print(f"Hash calculated on device: {file_hash}")
+                # Check VT directly with hash
+                report = self.vt_scanner._check_hash(file_hash)
+                if report and "error" not in report: # Found!
+                     return self.vt_scanner._format_report(report)
+                elif report and report.get("error") != 404:
+                     # Some other error
+                     return {"error": f"VT Check Failed: {report.get('error')}"}
+            
+            # If hash not found or calculation failed, pull the file
+            print("Hash unknown or file not scanned yet. Pulling file...")
+            local_temp_dir = "temp_scans"
+            os.makedirs(local_temp_dir, exist_ok=True)
+            local_filename = os.path.basename(remote_path)
+            local_path = os.path.join(local_temp_dir, local_filename)
+
+            pull_res = subprocess.run(["adb", "pull", remote_path, local_path], capture_output=True)
+            if pull_res.returncode == 0 and os.path.exists(local_path):
+                 # Scan local file (will upload if needed)
+                 result = self.vt_scanner.scan_file(local_path)
+                 # Cleanup
+                 try:
+                     os.remove(local_path)
+                 except: pass
+                 return result
+            else:
+                 return {"error": "Failed to pull file from device"}
+
+        except Exception as e:
+            print(f"Scan error: {e}")
+            return {"error": str(e)}
 
     def stop(self):
         self.monitoring = False

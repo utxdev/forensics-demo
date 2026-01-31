@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SudarshanaDashboard from './components/Sudarshana/SudarshanaDashboard';
-import ChitraguptaDashboard from './components/Chitragupta/ChitraguptaDashboard';
 
-import { LayoutDashboard, FileText } from 'lucide-react';
+import { LayoutDashboard } from 'lucide-react';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'sudarshana' | 'chitragupta'>('sudarshana');
-
   return (
     <div className="w-screen h-screen flex overflow-hidden bg-[#050A18] text-white">
       {/* Sidebar navigation */}
@@ -17,18 +14,10 @@ function App() {
 
         <nav className="flex-1 py-8 space-y-4">
           <button
-            onClick={() => setActiveTab('sudarshana')}
-            className={`w-full p-4 flex items-center gap-4 transition-all ${activeTab === 'sudarshana' ? 'bg-gradient-to-r from-blue-900/50 to-transparent border-l-4 border-cyan-400' : 'text-white/50 hover:text-white'}`}
+            className="w-full p-4 flex items-center gap-4 transition-all bg-gradient-to-r from-blue-900/50 to-transparent border-l-4 border-cyan-400"
           >
             <LayoutDashboard size={24} />
             <span className="hidden lg:block font-bold tracking-widest">SUDARSHANA</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('chitragupta')}
-            className={`w-full p-4 flex items-center gap-4 transition-all ${activeTab === 'chitragupta' ? 'bg-gradient-to-r from-amber-900/50 to-transparent border-l-4 border-amber-400' : 'text-white/50 hover:text-white'}`}
-          >
-            <FileText size={24} />
-            <span className="hidden lg:block font-bold tracking-widest">CHITRAGUPTA</span>
           </button>
         </nav>
 
@@ -42,7 +31,7 @@ function App() {
         {/* Grid overlay for cyberpunk feel */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
-        {activeTab === 'sudarshana' ? <SudarshanaDashboard /> : <ChitraguptaDashboard />}
+        <SudarshanaDashboard />
       </div>
     </div>
   );
