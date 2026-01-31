@@ -7,6 +7,14 @@ interface ScrollReportProps {
 }
 
 const ScrollReport: React.FC<ScrollReportProps> = ({ lines, onComplete }) => {
+    React.useEffect(() => {
+        const totalDuration = (2 + (lines.length * 0.5) + 1.5) * 1000;
+        const timer = setTimeout(() => {
+            onComplete();
+        }, totalDuration);
+        return () => clearTimeout(timer);
+    }, [lines, onComplete]);
+
     return (
         <div className="relative w-full max-w-2xl h-[600px] flex flex-col items-center">
             {/* Top Roll */}

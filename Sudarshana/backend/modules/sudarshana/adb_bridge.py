@@ -111,39 +111,82 @@ class ADBBridge:
             return []
 
     def extract_call_logs(self):
-        """Extracts call logs via dumpsys call_log."""
+        """Extracts and parses call logs."""
         if not self.check_connection():
-            return "Error: No device connected."
+            return []
         try:
-            # We use dumpsys call_log as a primary forensic source via ADB
+            # Primary: content query (more structured)
+            result = subprocess.run(["adb", "shell", "content", "query", "--uri", "content://call_log/calls", "--projection", "number,date,duration,type"], capture_output=True, text=True, timeout=10)
+            if "Row" in result.stdout:
+                calls = []
+                for line in result.stdout.split('\n'):
+                    if "Row" in line:
+                        match = re.search(r"number=(.*?), date=(.*?), duration=(.*?), type=(.*)", line)
+                        if match:
+                            calls.append({
+                                "number": match.group(1),
+                                "date": match.group(2),
+                                "duration": match.group(3),
+                                "type": match.group(4)
+                            })
+                return calls
+            
+            # Fallback: dumpsys
             result = subprocess.run(["adb", "shell", "dumpsys", "call_log"], capture_output=True, text=True, timeout=5)
-            # In a real scenario, we'd parse this more heavily. For the demo, we'll return the raw dump
-            # and potentially save it to a file later in the packager.
-            return result.stdout if result.stdout.strip() else "No recent call logs found in service dump."
+            # Basic parsing if needed
+            return [{"raw": result.stdout[:500]}] if result.stdout.strip() else []
         except Exception as e:
-            return f"Extraction failed: {str(e)}"
+            print(f"Call extraction error: {e}")
+            return []
 
     def extract_sms_logs(self):
-        """Extracts SMS logs via content query (requires content provider access)."""
+        """Extracts and parses SMS logs."""
         if not self.check_connection():
-            return "Error: No device connected."
+            return []
         try:
-            # content query --uri content://sms --projection address,date,body
-            # Note: This might require specific permissions or be blocked on some Android versions
-            result = subprocess.run(["adb", "shell", "content", "query", "--uri", "content://sms"], capture_output=True, text=True, timeout=5)
-            return result.stdout if result.stdout.strip() else "No SMS data found or access denied."
+            result = subprocess.run(["adb", "shell", "content", "query", "--uri", "content://sms", "--projection", "address,date,body,type"], capture_output=True, text=True, timeout=10)
+            if "Row" in result.stdout:
+                messages = []
+                for line in result.stdout.split('\n'):
+                    if "Row" in line:
+                        match = re.search(r"address=(.*?), date=(.*?), body=(.*?), type=(.*)", line)
+                        if match:
+                            messages.append({
+                                "address": match.group(1),
+                                "date": match.group(2),
+                                "body": match.group(3),
+                                "type": match.group(4)
+                            })
+                return messages
+            return []
         except Exception as e:
-            return f"SMS Extraction failed: {str(e)}"
+            print(f"SMS extraction error: {e}")
+            return []
 
-    def extract_system_logs(self):
-        """Provides a complete logcat dump."""
+    def extract_system_logs(self, limit=100):
+        """Extracts security-relevant system events for timeline."""
         if not self.check_connection():
-            return "Error: No device connected."
+            return []
         try:
-            result = subprocess.run(["adb", "logcat", "-d"], capture_output=True, text=True, timeout=5)
-            return result.stdout
+            # Get latest logcat with timestamps
+            result = subprocess.run(["adb", "logcat", "-d", "-t", str(limit)], capture_output=True, text=True, timeout=5)
+            events = []
+            for line in result.stdout.split('\n'):
+                if not line.strip(): continue
+                # Basic classification
+                etype = "system"
+                if any(x in line.lower() for x in ["auth", "login", "password"]): etype = "user"
+                elif any(x in line.lower() for x in ["socket", "connect", "http", "ip"]): etype = "network"
+                
+                events.append({
+                    "timestamp": line[:18].strip(), # Approx timestamp from -v time
+                    "description": line[18:].strip(),
+                    "type": etype
+                })
+            return events
         except Exception as e:
-            return f"Log extraction failed: {str(e)}"
+             print(f"System extraction error: {e}")
+             return []
 
     def stop(self):
         self.monitoring = False

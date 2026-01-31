@@ -115,8 +115,15 @@ class ReportRequest(BaseModel):
     case_id: str
     files: List[CaseFile]
 
+from modules.chitragupta.packager import packager
+
 @app.post("/api/chitragupta/generate")
 async def generate_report(data: dict):
+    # 0. Check ADB Connection Strictly
+    if not adb_bridge.check_connection():
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="NO_DEVICE_CONNECTED")
+
     # Metadata and Selections from Divine Form
     metadata = {
         "case_id": data.get("case_id", "UNCATEGORIZED"),
@@ -128,39 +135,53 @@ async def generate_report(data: dict):
     }
     selections = data.get("selections", {})
     
-    # 1. Create Evidence ZIP on Desktop (Triggers REAL ADB pulls)
-    zip_path = packager.create_package(metadata['case_id'], selections=selections)
+    # 1. Fetch deep forensic data for structured sections
+    extras = {}
+    if selections.get('calls'):
+        extras['calls'] = adb_bridge.extract_call_logs()
+    if selections.get('chat'):
+        extras['sms'] = adb_bridge.extract_sms_logs()
+    if selections.get('system'):
+        extras['timeline'] = adb_bridge.extract_system_logs(limit=30)
     
-    # 2. Get File Hashes (Calculate real hashes for the extracted files)
+    # 2. Create Evidence ZIP on Desktop (Triggers REAL ADB pulls)
+    zip_path = await asyncio.to_thread(packager.create_package, metadata['case_id'], selections=selections)
+    
+    # 3. Get File Hashes (Calculate real hashes for the extracted files)
     files_to_report = []
     # Index the base_path to get actual files
-    for root, dirs, files in os.walk(packager.base_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            with open(file_path, "rb") as f:
-                import hashlib
-                file_hash = hashlib.sha256(f.read()).hexdigest()
-                rel_path = os.path.relpath(file_path, packager.base_path)
-                files_to_report.append({
-                    "name": rel_path,
-                    "hash": file_hash,
-                    "status": "INTEGRITY_VERIFIED"
-                })
+    if os.path.exists(packager.base_path):
+        for root, dirs, files in os.walk(packager.base_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, "rb") as f:
+                        import hashlib
+                        file_hash = hashlib.sha256(f.read()).hexdigest()
+                        rel_path = os.path.relpath(file_path, packager.base_path)
+                        files_to_report.append({
+                            "name": rel_path,
+                            "hash": file_hash,
+                            "status": "INTEGRITY_VERIFIED"
+                        })
+                except:
+                    continue
     
-    # 3. Merkle Root Hash
+    # 4. Merkle Root Hash
     root_hash = hasher.build_merkle_tree([f['hash'] for f in files_to_report]) or "N/A"
     
-    # 4. Digital Signature
+    # 5. Digital Signature
     signature = signer.sign_hash(root_hash)
     
-    # 5. Generate PDF
+    # 6. Generate PDF with Extras
     report_file = f"Report_{metadata['case_id']}.pdf"
-    report_gen.generate_report(metadata, files_to_report, root_hash, signature, report_file)
+    report_gen.generate_report(metadata, files_to_report, root_hash, signature, report_file, extras=extras)
     
     return {
         "status": "sealed",
         "zip_path": zip_path,
-        "report_url": f"http://localhost:8000/{report_file}"
+        "report_url": f"http://localhost:8000/{report_file}",
+        "extras": extras # Also send to frontend for dashboard tabs
     }
 
 if __name__ == "__main__":
