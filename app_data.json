@@ -1,0 +1,1250 @@
+[
+    {
+        "name": "Customerapp",
+        "package": "com.grofers.customerapp",
+        "version": "17.75.0",
+        "installDate": "2026-01-31 09:36:58"
+    },
+    {
+        "name": "Core",
+        "package": "com.drikp.core",
+        "version": "2.6.0",
+        "installDate": "2026-01-22 21:40:26"
+    },
+    {
+        "name": "Fastproxy",
+        "package": "com.supertech.fastproxy",
+        "version": "1.0.4",
+        "installDate": "2026-01-19 14:03:12"
+    },
+    {
+        "name": "Consumer",
+        "package": "com.spinny.consumer",
+        "version": "5.1.5",
+        "installDate": "2026-01-14 09:24:31"
+    },
+    {
+        "name": "Register",
+        "package": "com.vehicle.rto.vahan.status.information.register",
+        "version": "13.50",
+        "installDate": "2026-01-08 14:55:15"
+    },
+    {
+        "name": "Club",
+        "package": "app.slikk.club",
+        "version": "3.1.5",
+        "installDate": "2026-01-04 17:44:17"
+    },
+    {
+        "name": "Seller",
+        "package": "com.cars24.seller",
+        "version": "11.13.19",
+        "installDate": "2026-01-03 09:28:30"
+    },
+    {
+        "name": "Android",
+        "package": "in.redbus.android",
+        "version": "81.3.5",
+        "installDate": "2025-12-23 20:21:36"
+    },
+    {
+        "name": "Jar App",
+        "package": "com.jar.app",
+        "version": "8.4.9",
+        "installDate": "2025-12-22 10:38:13"
+    },
+    {
+        "name": "Lite",
+        "package": "com.confirmtkt.lite",
+        "version": "8.4.0",
+        "installDate": "2025-12-19 11:00:59"
+    },
+    {
+        "name": "Supply",
+        "package": "com.meesho.supply",
+        "version": "26.6",
+        "installDate": "2025-12-18 09:02:57"
+    },
+    {
+        "name": "Eyebooster",
+        "package": "com.divinememorygames.eyebooster",
+        "version": "7.5",
+        "installDate": "2025-12-16 22:03:58"
+    },
+    {
+        "name": "Talkingtom",
+        "package": "com.outfit7.talkingtom",
+        "version": "5.1.3.3751",
+        "installDate": "2025-12-06 18:23:33"
+    },
+    {
+        "name": "Yoga",
+        "package": "jawline.exercises.slim.face.yoga",
+        "version": "1.3.2",
+        "installDate": "2025-12-05 12:09:45"
+    },
+    {
+        "name": "Android",
+        "package": "in.goindigo.android",
+        "version": "7.3.3",
+        "installDate": "2025-12-03 12:15:59"
+    },
+    {
+        "name": "Dominos",
+        "package": "com.Dominos",
+        "version": "12.1.41",
+        "installDate": "2025-11-26 21:32:20"
+    },
+    {
+        "name": "Tailwind",
+        "package": "com.google.android.apps.labs.language.tailwind",
+        "version": "1.22.1.859181246",
+        "installDate": "2025-11-15 08:45:00"
+    },
+    {
+        "name": "Indwealth",
+        "package": "in.indwealth",
+        "version": "9.1.1",
+        "installDate": "2025-11-07 10:28:43"
+    },
+    {
+        "name": "Master",
+        "package": "con.hotspot.vpn.free.master",
+        "version": "2.4.7.9",
+        "installDate": "2025-11-02 11:31:46"
+    },
+    {
+        "name": "Termux",
+        "package": "com.termux",
+        "version": "googleplay.2026.01.07",
+        "installDate": "2025-10-31 12:00:11"
+    },
+    {
+        "name": "Ajio",
+        "package": "com.ril.ajio",
+        "version": "9.28.1",
+        "installDate": "2025-10-30 10:01:36"
+    },
+    {
+        "name": "Rxpal",
+        "package": "com.phonegap.rxpal",
+        "version": "7.8.0",
+        "installDate": "2025-10-20 13:17:41"
+    },
+    {
+        "name": "Reels",
+        "package": "com.vlv.aravali.reels",
+        "version": "5.6.4",
+        "installDate": "2025-10-19 15:54:57"
+    },
+    {
+        "name": "Countrydelight",
+        "package": "app.mycountrydelight.in.countrydelight",
+        "version": "10.9.15",
+        "installDate": "2025-10-17 12:52:12"
+    },
+    {
+        "name": "Android",
+        "package": "com.rapidconn.android",
+        "version": "2.4.4",
+        "installDate": "2025-10-04 23:42:35"
+    },
+    {
+        "name": "Programming",
+        "package": "cpp.programming",
+        "version": "4.2.74",
+        "installDate": "2025-10-04 00:29:39"
+    },
+    {
+        "name": "Coding",
+        "package": "hacking.learnhacking.learn.hack.ethicalhacking.programming.coding",
+        "version": "4.2.74",
+        "installDate": "2025-10-04 00:27:20"
+    },
+    {
+        "name": "Development",
+        "package": "python.programming.coding.python3.development",
+        "version": "4.2.74",
+        "installDate": "2025-10-03 12:09:15"
+    },
+    {
+        "name": "Android",
+        "package": "com.walbi.android",
+        "version": "1.2.106919",
+        "installDate": "2025-10-03 10:40:06"
+    },
+    {
+        "name": "Securesms",
+        "package": "org.thoughtcrime.securesms",
+        "version": "7.70.1",
+        "installDate": "2025-09-05 18:16:04"
+    },
+    {
+        "name": "Android",
+        "package": "com.github.android",
+        "version": "1.242.0",
+        "installDate": "2025-07-29 00:39:08"
+    },
+    {
+        "name": "Wearable",
+        "package": "com.xiaomi.wearable",
+        "version": "3.47.1i",
+        "installDate": "2025-07-24 15:46:29"
+    },
+    {
+        "name": "Tower",
+        "package": "com.playstrom.hero.tower",
+        "version": "1.10.0",
+        "installDate": "2025-07-11 12:33:15"
+    },
+    {
+        "name": "Calculator",
+        "package": "all.in.one.calculator",
+        "version": "3.2.3",
+        "installDate": "2025-07-08 11:01:48"
+    },
+    {
+        "name": "Chatai",
+        "package": "com.scaleup.chatai",
+        "version": "4.0.12",
+        "installDate": "2025-07-03 12:25:29"
+    },
+    {
+        "name": "Stoofers",
+        "package": "com.stoofers.stoofers",
+        "version": "1.8.3",
+        "installDate": "2025-06-29 17:43:19"
+    },
+    {
+        "name": "Sololearn",
+        "package": "com.sololearn",
+        "version": "4.124.0",
+        "installDate": "2025-06-28 15:50:49"
+    },
+    {
+        "name": "Getcontact",
+        "package": "app.source.getcontact",
+        "version": "8.11.2",
+        "installDate": "2025-06-27 20:46:24"
+    },
+    {
+        "name": "Idleminertycoon",
+        "package": "com.fluffyfairygames.idleminertycoon",
+        "version": "5.41.0",
+        "installDate": "2025-06-22 17:53:29"
+    },
+    {
+        "name": "Appstore",
+        "package": "com.indus.appstore",
+        "version": "1.26.01.06.0_XIAOMI",
+        "installDate": "2025-06-20 20:27:51"
+    },
+    {
+        "name": "Chat",
+        "package": "com.deepseek.chat",
+        "version": "1.6.9",
+        "installDate": "2025-06-14 14:16:38"
+    },
+    {
+        "name": "Supervpnpayment",
+        "package": "com.jrzheng.supervpnpayment",
+        "version": "1.9.7",
+        "installDate": "2025-06-13 23:09:27"
+    },
+    {
+        "name": "Quicktv",
+        "package": "in.mohalla.quicktv",
+        "version": "2026.03.01",
+        "installDate": "2025-06-02 16:50:19"
+    },
+    {
+        "name": "Reels",
+        "package": "com.dashtoon.video.reels",
+        "version": "1.2.14",
+        "installDate": "2025-05-28 16:14:25"
+    },
+    {
+        "name": "Plus",
+        "package": "com.aranoah.healthkart.plus",
+        "version": "19.12.1",
+        "installDate": "2025-05-24 09:28:19"
+    },
+    {
+        "name": "Stablemoney App",
+        "package": "in.stablemoney.app",
+        "version": "2.6.27",
+        "installDate": "2025-05-21 09:18:44"
+    },
+    {
+        "name": "Credit",
+        "package": "cards.uni.app.credit",
+        "version": "1.85.2",
+        "installDate": "2025-05-12 10:03:09"
+    },
+    {
+        "name": "Merchant",
+        "package": "com.google.android.apps.nbu.paisa.merchant",
+        "version": "224.1.3 (arm64-v8a_prod)",
+        "installDate": "2025-05-10 12:06:03"
+    },
+    {
+        "name": "Instamart",
+        "package": "in.swiggy.android.instamart",
+        "version": "4.101.0",
+        "installDate": "2025-05-03 18:43:35"
+    },
+    {
+        "name": "Mobileapp",
+        "package": "com.bigbasket.mobileapp",
+        "version": "8.21.1",
+        "installDate": "2025-05-03 18:43:26"
+    },
+    {
+        "name": "Victor",
+        "package": "com.newleaf.app.android.victor",
+        "version": "3.5.50",
+        "installDate": "2025-04-22 19:20:04"
+    },
+    {
+        "name": "Josaa",
+        "package": "com.josaa",
+        "version": "1.33",
+        "installDate": "2025-04-20 14:55:44"
+    },
+    {
+        "name": "Food_order",
+        "package": "com.food.food_order",
+        "version": "2.1.84",
+        "installDate": "2025-04-14 10:47:18"
+    },
+    {
+        "name": "Java",
+        "package": "com.freeit.java",
+        "version": "5.2.54",
+        "installDate": "2025-04-04 09:31:29"
+    },
+    {
+        "name": "Drama",
+        "package": "com.storymatrix.drama",
+        "version": "5.2.1",
+        "installDate": "2025-03-31 22:55:20"
+    },
+    {
+        "name": "Blanksheets",
+        "package": "jp.co.wcircle.blanksheets",
+        "version": "2.3.5",
+        "installDate": "2025-03-31 15:23:53"
+    },
+    {
+        "name": "Tatadigital Tcp",
+        "package": "com.tatadigital.tcp",
+        "version": "6.2.1",
+        "installDate": "2025-03-31 01:15:36"
+    },
+    {
+        "name": "Android App",
+        "package": "com.kreditpe.android.app",
+        "version": "2.0",
+        "installDate": "2025-03-31 01:01:51"
+    },
+    {
+        "name": "Goodreels",
+        "package": "com.newreading.goodreels",
+        "version": "2.7.8.2078",
+        "installDate": "2025-03-30 13:52:56"
+    },
+    {
+        "name": "Woodturning",
+        "package": "com.BallGames.Woodturning",
+        "version": "3.11.30",
+        "installDate": "2025-03-25 00:49:59"
+    },
+    {
+        "name": "Vbay",
+        "package": "com.adidevv.vbay",
+        "version": "2.0.0",
+        "installDate": "2025-03-18 22:42:52"
+    },
+    {
+        "name": "Cybersecurity",
+        "package": "hacking.learnhacking.learn.hack.ethicalhacking.programming.coding.hackerx.cybersecurity",
+        "version": "hackerx_1.4.9",
+        "installDate": "2025-03-15 12:41:01"
+    },
+    {
+        "name": "Businesssimulator",
+        "package": "com.ttterbagames.businesssimulator",
+        "version": "1.25.10",
+        "installDate": "2025-03-15 10:40:11"
+    },
+    {
+        "name": "Mytalkingtomfree",
+        "package": "com.outfit7.mytalkingtomfree",
+        "version": "25.5.0.7276",
+        "installDate": "2025-03-08 22:35:47"
+    },
+    {
+        "name": "Brevent",
+        "package": "me.piebridge.brevent",
+        "version": "4.2.29.1",
+        "installDate": "2025-02-26 01:36:45"
+    },
+    {
+        "name": "Contactkeys",
+        "package": "com.google.android.contactkeys",
+        "version": "1.307.858531162",
+        "installDate": "2025-02-20 13:05:25"
+    },
+    {
+        "name": "Tycoon",
+        "package": "com.idle.cinema.empire.sim.tycoon",
+        "version": "2.21.02",
+        "installDate": "2025-02-17 13:12:58"
+    },
+    {
+        "name": "Mobcontrol",
+        "package": "com.vincentb.MobControl",
+        "version": "2.96.1",
+        "installDate": "2025-02-17 10:05:59"
+    },
+    {
+        "name": "Safetycore",
+        "package": "com.google.android.safetycore",
+        "version": "1.0.858530856",
+        "installDate": "2025-02-07 00:37:45"
+    },
+    {
+        "name": "Twoplayergameschallenge",
+        "package": "com.JindoBlu.TwoPlayerGamesChallenge",
+        "version": "7.3.4",
+        "installDate": "2025-02-04 18:20:54"
+    },
+    {
+        "name": "Sweatco App",
+        "package": "in.sweatco.app",
+        "version": "233.0.0",
+        "installDate": "2025-02-04 14:32:52"
+    },
+    {
+        "name": "Weaponmaster",
+        "package": "com.atknsyl.weaponmaster",
+        "version": "2.35.3",
+        "installDate": "2025-01-14 12:34:58"
+    },
+    {
+        "name": "Zeptoconsumerapp",
+        "package": "com.zeptoconsumerapp",
+        "version": "26.1.3",
+        "installDate": "2025-01-13 20:50:48"
+    },
+    {
+        "name": "Android",
+        "package": "com.whereismytrain.android",
+        "version": "7.1.5.802422502",
+        "installDate": "2025-01-10 20:40:30"
+    },
+    {
+        "name": "Clashroyale",
+        "package": "com.supercell.clashroyale",
+        "version": "130300024",
+        "installDate": "2024-12-28 00:43:09"
+    },
+    {
+        "name": "Android",
+        "package": "com.popclub.android",
+        "version": "2.0.36",
+        "installDate": "2024-12-15 20:44:20"
+    },
+    {
+        "name": "Brainly",
+        "package": "co.brainly",
+        "version": "5.282.0",
+        "installDate": "2024-12-10 22:09:50"
+    },
+    {
+        "name": "Phonepe App",
+        "package": "com.phonepe.app",
+        "version": "26.01.02.0",
+        "installDate": "2024-12-05 13:26:19"
+    },
+    {
+        "name": "Slack",
+        "package": "com.Slack",
+        "version": "26.01.30.0",
+        "installDate": "2024-12-03 10:49:55"
+    },
+    {
+        "name": "Todo",
+        "package": "com.example.todo",
+        "version": "1.0",
+        "installDate": "2024-11-28 16:56:11"
+    },
+    {
+        "name": "Simpletodolist",
+        "package": "com.example.simpletodolist",
+        "version": "1.0",
+        "installDate": "2024-11-27 23:12:50"
+    },
+    {
+        "name": "Mobile App",
+        "package": "railrestro.mobile.app",
+        "version": "1.2.8",
+        "installDate": "2024-11-23 23:17:40"
+    },
+    {
+        "name": "Railmadad",
+        "package": "cris.railmadad",
+        "version": "4.0.12",
+        "installDate": "2024-11-23 23:17:27"
+    },
+    {
+        "name": "Clashofclans",
+        "package": "com.supercell.clashofclans",
+        "version": "18.0.10",
+        "installDate": "2024-11-23 21:12:49"
+    },
+    {
+        "name": "Lemonn App",
+        "package": "com.lemonn.app",
+        "version": "7.1.62",
+        "installDate": "2024-11-19 14:44:45"
+    },
+    {
+        "name": "Android",
+        "package": "com.seekho.android",
+        "version": "1.13.79",
+        "installDate": "2024-11-18 22:03:29"
+    },
+    {
+        "name": "Payments",
+        "package": "money.super.payments",
+        "version": "3.0.3",
+        "installDate": "2024-11-17 19:45:59"
+    },
+    {
+        "name": "Conquercountries",
+        "package": "com.ridgge.conquercountries",
+        "version": "9.50",
+        "installDate": "2024-11-15 15:57:20"
+    },
+    {
+        "name": "Chess",
+        "package": "com.chess",
+        "version": "4.9.20-googleplay",
+        "installDate": "2024-10-16 16:41:36"
+    },
+    {
+        "name": "Invideo Ai",
+        "package": "io.invideo.ai",
+        "version": "4.4.24",
+        "installDate": "2024-10-14 18:30:42"
+    },
+    {
+        "name": "Threeinvesteers App",
+        "package": "com.threeinvesteers.app",
+        "version": "3.4.3",
+        "installDate": "2024-10-11 23:46:01"
+    },
+    {
+        "name": "Hiface",
+        "package": "com.hiface",
+        "version": "18.7.1",
+        "installDate": "2024-10-10 18:17:58"
+    },
+    {
+        "name": "Android",
+        "package": "ai.perplexity.app.android",
+        "version": "2.73.0",
+        "installDate": "2024-10-09 12:12:57"
+    },
+    {
+        "name": "Offlinegames",
+        "package": "com.JindoBlu.OfflineGames",
+        "version": "3.7.3",
+        "installDate": "2024-10-03 23:45:15"
+    },
+    {
+        "name": "Netmirror",
+        "package": "app.netmirror.netmirror",
+        "version": "2.1",
+        "installDate": "2024-10-01 12:44:08"
+    },
+    {
+        "name": "Liquide App",
+        "package": "life.liquide.app",
+        "version": "1.3.11",
+        "installDate": "2024-09-24 15:22:50"
+    },
+    {
+        "name": "Music",
+        "package": "com.bsbportal.music",
+        "version": "3.72.0.5",
+        "installDate": "2024-09-19 15:20:20"
+    },
+    {
+        "name": "Candycrushsaga",
+        "package": "com.king.candycrushsaga",
+        "version": "1.320.1.1",
+        "installDate": "2024-09-14 22:55:17"
+    },
+    {
+        "name": "Vidmar Pti",
+        "package": "com.vidmar.pti",
+        "version": "2.7.1",
+        "installDate": "2024-09-07 16:19:39"
+    },
+    {
+        "name": "Dee App",
+        "package": "com.amazon.dee.app",
+        "version": "2.2.661452.0",
+        "installDate": "2024-09-07 14:18:32"
+    },
+    {
+        "name": "Classroom",
+        "package": "com.google.android.apps.classroom",
+        "version": "3.49.852528471",
+        "installDate": "2024-09-06 10:27:15"
+    },
+    {
+        "name": "Subwaysurf",
+        "package": "com.kiloo.subwaysurf",
+        "version": "3.58.11",
+        "installDate": "2024-09-05 20:05:38"
+    },
+    {
+        "name": "Digiyatra Org",
+        "package": "org.digiyatra.org",
+        "version": "4.2.11",
+        "installDate": "2024-09-01 00:56:18"
+    },
+    {
+        "name": "Wynk",
+        "package": "tv.accedo.airtel.wynk",
+        "version": "1.113.3",
+        "installDate": "2024-08-30 20:48:46"
+    },
+    {
+        "name": "Screamhero",
+        "package": "com.ketchapp.screamhero",
+        "version": "4.0.10",
+        "installDate": "2024-08-24 15:40:22"
+    },
+    {
+        "name": "Sonyliv",
+        "package": "com.sonyliv",
+        "version": "6.28.6",
+        "installDate": "2024-08-15 20:49:52"
+    },
+    {
+        "name": "Video",
+        "package": "com.ymaxplayer.video",
+        "version": "1.1.3",
+        "installDate": "2024-08-14 09:48:56"
+    },
+    {
+        "name": "Duolingo",
+        "package": "com.duolingo",
+        "version": "6.57.3",
+        "installDate": "2024-08-05 18:12:25"
+    },
+    {
+        "name": "Android",
+        "package": "com.snowcorp.stickerly.android",
+        "version": "3.27.3",
+        "installDate": "2024-08-05 15:25:00"
+    },
+    {
+        "name": "Stickermaker",
+        "package": "com.stickify.stickermaker",
+        "version": "6.0.3",
+        "installDate": "2024-08-05 11:29:41"
+    },
+    {
+        "name": "Truthin",
+        "package": "com.natfirst.truthin",
+        "version": "2.6.75",
+        "installDate": "2024-08-02 23:33:04"
+    },
+    {
+        "name": "Keep",
+        "package": "com.google.android.keep",
+        "version": "5.26.031.00.90",
+        "installDate": "2024-07-30 16:43:40"
+    },
+    {
+        "name": "Learning",
+        "package": "com.linkedin.android.learning",
+        "version": "2.221.21",
+        "installDate": "2024-07-29 01:52:02"
+    },
+    {
+        "name": "Jupiter",
+        "package": "money.jupiter",
+        "version": "3.2.24",
+        "installDate": "2024-07-25 13:46:45"
+    },
+    {
+        "name": "Mediaclient",
+        "package": "com.netflix.mediaclient",
+        "version": "9.50.2 build 8 63832",
+        "installDate": "2024-07-12 12:50:07"
+    },
+    {
+        "name": "Android",
+        "package": "com.flipkart.android",
+        "version": "8.39",
+        "installDate": "2024-07-09 18:17:09"
+    },
+    {
+        "name": "Bard",
+        "package": "com.google.android.apps.bard",
+        "version": "1.0.795460806",
+        "installDate": "2024-06-27 17:40:03"
+    },
+    {
+        "name": "Sunokitaab",
+        "package": "com.sunokitaab.sunokitaab",
+        "version": "1.10.41",
+        "installDate": "2024-06-23 16:45:29"
+    },
+    {
+        "name": "Lenskart App",
+        "package": "com.lenskart.app",
+        "version": "5.4.1",
+        "installDate": "2024-06-22 20:22:43"
+    },
+    {
+        "name": "Flash",
+        "package": "com.flashmonk.flash",
+        "version": "3.0.9",
+        "installDate": "2024-06-19 09:20:53"
+    },
+    {
+        "name": "Cashify",
+        "package": "com.reglobe.cashify",
+        "version": "6.3",
+        "installDate": "2024-06-16 09:49:38"
+    },
+    {
+        "name": "Playstrom Bob",
+        "package": "com.playstrom.bob",
+        "version": "1.3.44",
+        "installDate": "2024-06-10 20:04:05"
+    },
+    {
+        "name": "Pizzaidle",
+        "package": "io.supercent.pizzaidle",
+        "version": "54.2.0",
+        "installDate": "2024-06-08 11:37:53"
+    },
+    {
+        "name": "Hotstar",
+        "package": "in.startv.hotstar",
+        "version": "26.01.12.2",
+        "installDate": "2024-06-07 15:02:19"
+    },
+    {
+        "name": "Drive",
+        "package": "com.dubox.drive",
+        "version": "4.11.5",
+        "installDate": "2024-05-31 13:07:39"
+    },
+    {
+        "name": "Consumer",
+        "package": "com.oyo.consumer",
+        "version": "12.2.3",
+        "installDate": "2024-05-24 21:55:00"
+    },
+    {
+        "name": "Android App",
+        "package": "com.amazon.minitv.android.app",
+        "version": "1.7.21.600",
+        "installDate": "2024-05-20 18:02:22"
+    },
+    {
+        "name": "Smarthome",
+        "package": "com.xiaomi.smarthome",
+        "version": "8.11.826",
+        "installDate": "2024-05-11 02:05:31"
+    },
+    {
+        "name": "Mi_care",
+        "package": "com.xiaomi.mi_care",
+        "version": "1.0.33",
+        "installDate": "2024-05-11 02:05:30"
+    },
+    {
+        "name": "Swachhbharat",
+        "package": "com.ichangemycity.swachhbharat",
+        "version": "2.10.2",
+        "installDate": "2024-05-10 16:27:16"
+    },
+    {
+        "name": "Universal",
+        "package": "com.phdv.universal",
+        "version": "1.10.0",
+        "installDate": "2024-05-08 19:14:19"
+    },
+    {
+        "name": "Upstox App",
+        "package": "in.upstox.app",
+        "version": "3.8.0",
+        "installDate": "2024-05-07 22:15:24"
+    },
+    {
+        "name": "Funngro",
+        "package": "com.wishbanc.funngro",
+        "version": "1.3.106",
+        "installDate": "2024-05-07 14:33:31"
+    },
+    {
+        "name": "Carinfo",
+        "package": "com.cuvora.carinfo",
+        "version": "7.98.0",
+        "installDate": "2024-04-18 18:10:10"
+    },
+    {
+        "name": "Stickermakerforwhatsapp",
+        "package": "com.marsvard.stickermakerforwhatsapp",
+        "version": "1.0.10-5",
+        "installDate": "2024-03-25 23:02:04"
+    },
+    {
+        "name": "Instameter2",
+        "package": "com.beakerapps.instameter2",
+        "version": "5.5",
+        "installDate": "2024-03-22 00:39:46"
+    },
+    {
+        "name": "Android",
+        "package": "com.instagram.android",
+        "version": "415.0.0.0.48",
+        "installDate": "2024-02-29 16:59:58"
+    },
+    {
+        "name": "Upiapp",
+        "package": "in.org.npci.upiapp",
+        "version": "4.0.15",
+        "installDate": "2024-02-28 11:38:34"
+    },
+    {
+        "name": "Officebuilding Gp",
+        "package": "com.warrior.officebuilding.gp",
+        "version": "3.1.4",
+        "installDate": "2024-02-26 20:12:17"
+    },
+    {
+        "name": "Todoreminder Gen",
+        "package": "com.ToDoReminder.gen",
+        "version": "2.69.02",
+        "installDate": "2024-02-16 08:15:56"
+    },
+    {
+        "name": "Invest",
+        "package": "ing.whitepivot.invest",
+        "version": "6.23.0",
+        "installDate": "2024-02-08 19:17:32"
+    },
+    {
+        "name": "Reward2cash",
+        "package": "com.libhar.reward2cash",
+        "version": "1.3.1",
+        "installDate": "2024-02-06 03:33:14"
+    },
+    {
+        "name": "Voicerec",
+        "package": "com.splendapps.voicerec",
+        "version": "3.36",
+        "installDate": "2024-02-06 01:23:30"
+    },
+    {
+        "name": "Torbrowser",
+        "package": "org.torproject.torbrowser",
+        "version": "15.0.4 (140.7.0esr)",
+        "installDate": "2024-01-12 01:02:18"
+    },
+    {
+        "name": "Character App",
+        "package": "ai.character.app",
+        "version": "1.15.2",
+        "installDate": "2023-12-24 18:50:47"
+    },
+    {
+        "name": "Politicalrun",
+        "package": "com.lookout.PoliticalRun",
+        "version": "2.0",
+        "installDate": "2023-12-12 14:13:42"
+    },
+    {
+        "name": "Screenrecorder",
+        "package": "videoeditor.videorecorder.screenrecorder",
+        "version": "2.4.8.1",
+        "installDate": "2023-12-07 13:06:28"
+    },
+    {
+        "name": "Programming",
+        "package": "free.programming.programming",
+        "version": "10.0.6.07",
+        "installDate": "2023-12-01 19:32:43"
+    },
+    {
+        "name": "Booster",
+        "package": "com.goodev.volume.booster",
+        "version": "8.1",
+        "installDate": "2023-10-29 22:15:27"
+    },
+    {
+        "name": "Thirdpartyclient",
+        "package": "com.amazon.avod.thirdpartyclient",
+        "version": "3.0.436.1347",
+        "installDate": "2023-10-26 15:17:54"
+    },
+    {
+        "name": "Docs",
+        "package": "com.google.android.apps.docs.editors.docs",
+        "version": "1.26.031.03.90",
+        "installDate": "2023-10-21 02:36:17"
+    },
+    {
+        "name": "Groww",
+        "package": "com.nextbillion.groww",
+        "version": "18.1.1",
+        "installDate": "2023-10-16 16:09:45"
+    },
+    {
+        "name": "Coindcx Btc",
+        "package": "com.coindcx.btc",
+        "version": "7.36.0003",
+        "installDate": "2023-10-09 17:49:38"
+    },
+    {
+        "name": "Net Pvr",
+        "package": "com.net.pvr",
+        "version": "21.26",
+        "installDate": "2023-09-24 14:59:08"
+    },
+    {
+        "name": "Lotusintouch",
+        "package": "com.sbi.lotusintouch",
+        "version": "2.27.04",
+        "installDate": "2023-09-12 23:00:22"
+    },
+    {
+        "name": "Chatgpt",
+        "package": "com.openai.chatgpt",
+        "version": "1.2026.020",
+        "installDate": "2023-08-29 15:34:37"
+    },
+    {
+        "name": "Aravali",
+        "package": "com.vlv.aravali",
+        "version": "5.6.4",
+        "installDate": "2023-08-29 15:17:57"
+    },
+    {
+        "name": "Android App",
+        "package": "tv.twitch.android.app",
+        "version": "27.0.0",
+        "installDate": "2023-08-28 19:27:38"
+    },
+    {
+        "name": "Barcelona",
+        "package": "com.instagram.barcelona",
+        "version": "414.0.0.39.83",
+        "installDate": "2023-07-12 16:20:49"
+    },
+    {
+        "name": "Ondemand",
+        "package": "com.jio.media.ondemand",
+        "version": "25.04.100-ce3c406",
+        "installDate": "2023-07-06 20:22:39"
+    },
+    {
+        "name": "Paytm",
+        "package": "net.one97.paytm",
+        "version": "10.74.1",
+        "installDate": "2023-06-15 13:21:02"
+    },
+    {
+        "name": "Sheets",
+        "package": "com.google.android.apps.docs.editors.sheets",
+        "version": "1.26.031.02.90",
+        "installDate": "2023-04-17 17:46:52"
+    },
+    {
+        "name": "Easypiano",
+        "package": "com.bilkon.easypiano",
+        "version": "1.28",
+        "installDate": "2023-03-27 14:42:08"
+    },
+    {
+        "name": "Android",
+        "package": "com.twitter.android",
+        "version": "11.58.0-release.0",
+        "installDate": "2022-12-16 12:06:49"
+    },
+    {
+        "name": "Keyboard",
+        "package": "com.stylish.keyboard",
+        "version": "2.0.18",
+        "installDate": "2022-12-10 23:32:28"
+    },
+    {
+        "name": "Slides",
+        "package": "com.google.android.apps.docs.editors.slides",
+        "version": "1.26.031.02.90",
+        "installDate": "2022-11-23 15:58:08"
+    },
+    {
+        "name": "Discordbotdesinger",
+        "package": "com.jakubtomana.discordbotdesinger",
+        "version": "2.8.5",
+        "installDate": "2022-10-12 23:12:11"
+    },
+    {
+        "name": "Music",
+        "package": "com.spotify.music",
+        "version": "9.1.16.1450",
+        "installDate": "2022-09-27 17:04:37"
+    },
+    {
+        "name": "Shopping",
+        "package": "in.amazon.mShop.android.shopping",
+        "version": "32.2.0.300",
+        "installDate": "2022-09-05 14:13:52"
+    },
+    {
+        "name": "Nammametro",
+        "package": "com.aum.nammametro",
+        "version": "2.18",
+        "installDate": "2022-07-25 17:57:35"
+    },
+    {
+        "name": "Speedometer",
+        "package": "com.ktwapps.speedometer",
+        "version": "16.1",
+        "installDate": "2022-07-20 06:53:51"
+    },
+    {
+        "name": "Passenger",
+        "package": "com.rapido.passenger",
+        "version": "8.92.0",
+        "installDate": "2022-07-19 14:31:33"
+    },
+    {
+        "name": "Authenticator2",
+        "package": "com.google.android.apps.authenticator2",
+        "version": "7.0",
+        "installDate": "2022-07-14 09:00:16"
+    },
+    {
+        "name": "Tatasky",
+        "package": "com.ryzmedia.tatasky",
+        "version": "20.0",
+        "installDate": "2022-07-09 15:14:58"
+    },
+    {
+        "name": "Myairtelapp",
+        "package": "com.myairtelapp",
+        "version": "4.135.2",
+        "installDate": "2022-07-06 08:43:57"
+    },
+    {
+        "name": "Speech",
+        "package": "com.xiaomi.mibrain.speech",
+        "version": "1.2.9",
+        "installDate": "2022-07-06 08:19:04"
+    },
+    {
+        "name": "Frontpage",
+        "package": "com.reddit.frontpage",
+        "version": "2026.04.0",
+        "installDate": "2022-06-29 05:26:50"
+    },
+    {
+        "name": "Paidtasks",
+        "package": "com.google.android.apps.paidtasks",
+        "version": "2025110300",
+        "installDate": "2022-06-12 05:00:58"
+    },
+    {
+        "name": "Discord",
+        "package": "com.discord",
+        "version": "314.7 - Beta",
+        "installDate": "2022-06-07 07:04:19"
+    },
+    {
+        "name": "Truecaller",
+        "package": "com.truecaller",
+        "version": "26.2.5",
+        "installDate": "2022-06-03 15:12:47"
+    },
+    {
+        "name": "Speedtest",
+        "package": "org.zwanoo.android.speedtest",
+        "version": "6.5.3",
+        "installDate": "2022-06-03 15:11:39"
+    },
+    {
+        "name": "Copylink",
+        "package": "nl.robwu.copylink",
+        "version": "1.4",
+        "installDate": "2022-06-03 14:03:10"
+    },
+    {
+        "name": "Reader",
+        "package": "com.adobe.reader",
+        "version": "25.12.2.42824",
+        "installDate": "2022-06-03 13:55:24"
+    },
+    {
+        "name": "Ubercab",
+        "package": "com.ubercab",
+        "version": "4.615.10000",
+        "installDate": "2022-06-03 13:45:43"
+    },
+    {
+        "name": "Customer",
+        "package": "com.olacabs.customer",
+        "version": "7.4.6",
+        "installDate": "2022-06-03 13:45:16"
+    },
+    {
+        "name": "Android",
+        "package": "com.digilocker.android",
+        "version": "9.2.5",
+        "installDate": "2022-06-03 13:43:50"
+    },
+    {
+        "name": "Zomato",
+        "package": "com.application.zomato",
+        "version": "19.3.2",
+        "installDate": "2022-06-03 13:40:55"
+    },
+    {
+        "name": "Android",
+        "package": "in.swiggy.android",
+        "version": "4.101.0",
+        "installDate": "2022-06-03 13:40:07"
+    },
+    {
+        "name": "Jioplay Tv",
+        "package": "com.jio.jioplay.tv",
+        "version": "7.1.7",
+        "installDate": "2022-06-03 13:39:38"
+    },
+    {
+        "name": "Fampay In",
+        "package": "com.fampay.in",
+        "version": "4.0.2.9",
+        "installDate": "2022-06-03 13:38:36"
+    },
+    {
+        "name": "Messenger",
+        "package": "org.telegram.messenger",
+        "version": "12.3.1",
+        "installDate": "2022-06-03 13:38:21"
+    },
+    {
+        "name": "Whatsapp",
+        "package": "com.whatsapp",
+        "version": "2.26.2.72",
+        "installDate": "2022-06-03 13:10:49"
+    },
+    {
+        "name": "Files",
+        "package": "com.google.android.apps.nbu.files",
+        "version": "1.9938.854818729.0-release",
+        "installDate": "2022-06-03 13:01:07"
+    },
+    {
+        "name": "Shop",
+        "package": "com.mi.global.shop",
+        "version": "4.9.12",
+        "installDate": "2022-06-03 13:00:28"
+    },
+    {
+        "name": "Android",
+        "package": "com.linkedin.android",
+        "version": "4.1.1161.1",
+        "installDate": "2022-06-03 13:00:16"
+    },
+    {
+        "name": "Xiaomi",
+        "package": "com.facemoji.lite.xiaomi",
+        "version": "2.8.0",
+        "installDate": "2022-03-07 00:21:55"
+    },
+    {
+        "name": "Screenrecorder",
+        "package": "com.miui.screenrecorder",
+        "version": "2.13.0.14.0",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Remotecontroller",
+        "package": "com.duokan.phone.remotecontroller",
+        "version": "7.1.3G",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Calculator",
+        "package": "com.miui.calculator",
+        "version": "15.0.14",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Docs",
+        "package": "com.google.android.apps.docs",
+        "version": "2.26.037.1.all.alldpi",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Mediaeditor",
+        "package": "com.miui.mediaeditor",
+        "version": "1.9.0.6-global",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Photos",
+        "package": "com.google.android.apps.photos",
+        "version": "7.60.0.859276722",
+        "installDate": "2021-09-28 16:13:08"
+    },
+    {
+        "name": "Scanner",
+        "package": "com.xiaomi.scanner",
+        "version": "13.2204.5",
+        "installDate": "2021-09-28 16:13:07"
+    },
+    {
+        "name": "Fashiongallery",
+        "package": "com.miui.android.fashiongallery",
+        "version": "4.2.2",
+        "installDate": "2021-09-28 16:13:07"
+    },
+    {
+        "name": "Tachyon",
+        "package": "com.google.android.apps.tachyon",
+        "version": "343.0.859187371.duo.android_20260119.01_p1",
+        "installDate": "2021-09-28 16:13:07"
+    },
+    {
+        "name": "Midrop",
+        "package": "com.xiaomi.midrop",
+        "version": "3.47.06",
+        "installDate": "2021-09-28 16:13:07"
+    },
+    {
+        "name": "Lite",
+        "package": "cn.wps.xiaomi.abroad.lite",
+        "version": "2.6.6",
+        "installDate": "2021-09-28 16:13:07"
+    },
+    {
+        "name": "Wallet In",
+        "package": "com.mipay.wallet.in",
+        "version": "2.19.2",
+        "installDate": "2009-01-01 05:30:00"
+    }
+]
