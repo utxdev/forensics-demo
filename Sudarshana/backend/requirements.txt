@@ -9,5 +9,9 @@ cryptography
 pydantic
 numpy
 websockets
-python-multipart
 # For ADB interaction if needed via lib, but we might use subprocess
+requests
+python-dotenv
+
+python-multipart
+python-multipart
