@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileUploadZone } from '@/components/FileUploadZone';
+import { DeviceManager } from '@/components/DeviceManager';
 import { HashVerification } from '@/components/HashVerification';
 import { TimelineVisualization } from '@/components/TimelineVisualization';
 import { KarmaSeal } from '@/components/KarmaSeal';
@@ -55,6 +56,10 @@ const Index = () => {
       console.error("Upload failed", err);
       // Fallback or error toast here
     }
+  }, []);
+
+  const handleDeviceFilePulled = useCallback((newFile: ForensicFile) => {
+    setFiles(prev => [...prev, newFile]);
   }, []);
 
   const generateMerkleRoot = useCallback((files: ForensicFile[]): string => {
@@ -336,7 +341,7 @@ const Index = () => {
               </div>
             </motion.section>
 
-            {/* File Upload */}
+            {/* File Upload / Device Connect */}
             <motion.section
               className="p-6 bg-card rounded-lg border border-border"
               initial={{ opacity: 0, y: 20 }}
@@ -345,13 +350,26 @@ const Index = () => {
             >
               <div className="flex items-center gap-2 mb-4">
                 <FileText className="w-5 h-5 text-primary" />
-                <h2 className="font-display text-lg">Digital Artifacts</h2>
+                <h2 className="font-display text-lg">Evidence Acquisition</h2>
               </div>
 
-              <FileUploadZone
-                onFilesAdded={handleFilesAdded}
-                existingFiles={files}
-              />
+              <Tabs defaultValue="device" className="w-full">
+                <TabsList className="w-full grid grid-cols-2 mb-4">
+                  <TabsTrigger value="device">ADB Device</TabsTrigger>
+                  <TabsTrigger value="manual">Manual Upload</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="device" className="mt-0">
+                  <DeviceManager onFilePulled={handleDeviceFilePulled} />
+                </TabsContent>
+
+                <TabsContent value="manual" className="mt-0">
+                  <FileUploadZone
+                    onFilesAdded={handleFilesAdded}
+                    existingFiles={files}
+                  />
+                </TabsContent>
+              </Tabs>
             </motion.section>
 
             {/* Generate Button */}

@@ -188,6 +188,45 @@ class ADBBridge:
              print(f"System extraction error: {e}")
              return []
 
+    def list_files(self, path="/sdcard"):
+        """Lists files in a directory on the device."""
+        if not self.check_connection():
+            return []
+        try:
+            # Use ls -l to get more info, though parsing can be tricky.
+            # -p adds a / to directories
+            result = subprocess.run(["adb", "shell", "ls", "-p", path], capture_output=True, text=True, timeout=5)
+            entries = []
+            for line in result.stdout.split('\n'):
+                line = line.strip()
+                if not line: continue
+                is_dir = line.endswith('/')
+                entries.append({
+                    "name": line,
+                    "path": f"{path.rstrip('/')}/{line}",
+                    "isDir": is_dir
+                })
+            return entries
+        except Exception as e:
+            print(f"List files error: {e}")
+            return []
+
+    def pull_file(self, remote_path, local_destination):
+        """Pulls a file from device to local destination."""
+        if not self.check_connection():
+            return False
+        try:
+            print(f"Pulling {remote_path} to {local_destination}")
+            # subprocess.run check return code
+            result = subprocess.run(["adb", "pull", remote_path, local_destination], capture_output=True, text=True, timeout=30)
+            if result.returncode == 0:
+                return True
+            print(f"ADB Pull failed: {result.stderr}")
+            return False
+        except Exception as e:
+            print(f"Pull file error: {e}")
+            return False
+
     def stop(self):
         self.monitoring = False
 
