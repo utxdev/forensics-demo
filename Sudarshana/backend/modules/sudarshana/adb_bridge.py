@@ -11,20 +11,35 @@ class ADBBridge:
         self.interesting_events = []
         self.lock = threading.Lock()
         self.monitoring = False
+        self.monitor_thread = None
+        self.previous_connection_state = False  # Track previous connection state
 
     def check_connection(self):
         """Checks if a device is connected via ADB."""
         try:
-            result = subprocess.run(["adb", "devices"], capture_output=True, text=True)
-            output = result.stdout.strip()
-            # Look for a device that is not 'List of devices attached'
-            lines = output.split('\n')
-            for line in lines[1:]:
+            # Add timeout for robustness
+            result = subprocess.run(["adb", "devices"], capture_output=True, text=True, timeout=2)
+            lines = result.stdout.strip().split('\n')
+
+            # Determine current connection state. A device is connected if there's more than one line
+            # (the first line is "List of devices attached") and the second line contains "device".
+            # This handles cases where multiple devices are connected, but we only care if *any* device is present.
+            current_state = False
+            for line in lines[1:]: # Skip "List of devices attached"
                 if line.strip() and "device" in line:
-                    self.device_connected = True
-                    return True
-            self.device_connected = False
-            return False
+                    current_state = True
+                    break
+            
+            # Detect reconnection: previous state was False (disconnected), current state is True (connected)
+            if not self.previous_connection_state and current_state:
+                with self.lock:
+                    self.logs.clear()
+                    self.interesting_events.clear()
+                print("Device reconnected - cleared all previous logs")
+            
+            self.device_connected = current_state # Update the instance variable
+            self.previous_connection_state = current_state # Store current state for next check
+            return current_state
         except FileNotFoundError:
             print("ADB not found in path.")
             self.device_connected = False
