@@ -48,8 +48,14 @@ const HeatmapView = () => {
         <div className="w-full h-full bg-cosmic-dark/95 backdrop-blur pt-24 pb-20 px-10 overflow-y-auto">
             <div className="border border-cosmic-gold/20 rounded-xl p-8 bg-black/40 shadow-2xl">
                 <h2 className="text-cosmic-gold text-sm font-bold uppercase tracking-[0.2em] mb-8 border-b border-white/10 pb-4">
-                    Temporal Density Analysis
+                    Temporal Density Analysis ({events.length} Events)
                 </h2>
+
+                {events.length === 0 && (
+                    <div className="text-center text-white/50 py-10">
+                        No events found. Check connection or data logs.
+                    </div>
+                )}
 
                 {/* Heatmap Grid */}
                 <div className="flex flex-wrap gap-1 justify-center">

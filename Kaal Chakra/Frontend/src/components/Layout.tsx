@@ -1,5 +1,4 @@
 import React from 'react';
-import { Zap } from 'lucide-react';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -26,15 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
 
                 <div className="glass-panel px-4 py-2 flex items-center gap-4 text-xs font-mono text-neon-cyan pointer-events-auto">
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span>SYSTEM ONLINE</span>
-                    </div>
-                    <div className="h-4 w-[1px] bg-white/10" />
-                    <div>
-                        <Zap size={14} className="inline mr-1" />
-                        CORE: STABLE
-                    </div>
+                    {/* Status Block Removed as per user request */}
                 </div>
             </header>
 

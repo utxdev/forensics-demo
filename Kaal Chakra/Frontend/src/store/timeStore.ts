@@ -19,7 +19,10 @@ interface TimeState {
     setEvents: (events: MasterEvent[]) => void;
     addGeoFence: (fence: GeoFence) => void;
     removeGeoFence: (id: string) => void;
+    fetchEvents: () => Promise<void>;
 }
+
+import { fetchCalls, fetchSMS, fetchLogs, fetchFiles } from '../api/client';
 
 export const useTimeStore = create<TimeState>((set) => ({
     currentTimestamp: Date.now(),
@@ -38,4 +41,32 @@ export const useTimeStore = create<TimeState>((set) => ({
     setEvents: (events) => set({ events }),
     addGeoFence: (fence) => set((state) => ({ geoFences: [...state.geoFences, fence] })),
     removeGeoFence: (id) => set((state) => ({ geoFences: state.geoFences.filter(f => f.id !== id) })),
+    fetchEvents: async () => {
+        // Reset events initially? Or keep them? Let's reset to avoid dupes on re-fetch
+        set({ events: [] });
+
+        // Helper to append events
+        const appendEvents = (newEvents: MasterEvent[]) => {
+            set((state) => ({
+                events: [...state.events, ...newEvents].sort((a, b) => b.timestamp - a.timestamp)
+            }));
+        };
+
+        // Fetch sequentially to avoid overloading
+        try {
+            const calls = await fetchCalls();
+            appendEvents(calls);
+
+            const sms = await fetchSMS();
+            appendEvents(sms);
+
+            const logs = await fetchLogs();
+            appendEvents(logs);
+
+            const files = await fetchFiles();
+            appendEvents(files);
+        } catch (e) {
+            console.error("Error during incremental fetch", e);
+        }
+    }
 }));

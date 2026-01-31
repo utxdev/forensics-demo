@@ -5,7 +5,9 @@ export type EventType =
     | 'photo'
     | 'app'
     | 'whatsapp'
-    | 'browser';
+    | 'browser'
+    | 'log'
+    | 'file_event';
 
 export interface MasterEvent {
     timestamp: number; // INTEGER PRIMARY KEY
@@ -21,7 +23,7 @@ export interface MasterEvent {
     id: string; // Derived from hash or generated for UI keys
 }
 
-export type ViewMode = 'circular' | 'linear' | 'heatmap' | 'map';
+export type ViewMode = 'circular' | 'linear' | 'heatmap' | 'map' | 'datalog';
 
 export interface GeoFence {
     id: string;

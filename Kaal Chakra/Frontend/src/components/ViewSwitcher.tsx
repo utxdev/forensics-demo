@@ -9,9 +9,10 @@ const ViewSwitcher = () => {
 
     const views: { id: ViewMode; icon: React.ReactNode; label: string }[] = [
         { id: 'circular', icon: <Circle size={18} />, label: 'COSMIC WHEEL' },
-        { id: 'linear', icon: <List size={18} />, label: 'DATA LOG' },
+        { id: 'linear', icon: <List size={18} />, label: 'LINEAR TIMELINE' },
         { id: 'map', icon: <MapIcon size={18} />, label: 'GEO SPATIAL' },
         { id: 'heatmap', icon: <Activity size={18} />, label: 'HEAT MAP' },
+        { id: 'datalog', icon: <List size={18} />, label: 'DATA LOGS' },
     ];
 
     return (
