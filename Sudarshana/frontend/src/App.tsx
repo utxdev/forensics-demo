@@ -1,5 +1,9 @@
 import React from 'react';
 import SudarshanaDashboard from './components/Sudarshana/SudarshanaDashboard';
+<<<<<<< Updated upstream
+=======
+// import ChitraguptaDashboard from './components/Chitragupta/ChitraguptaDashboard';
+>>>>>>> Stashed changes
 
 import { LayoutDashboard } from 'lucide-react';
 
@@ -31,7 +35,11 @@ function App() {
         {/* Grid overlay for cyberpunk feel */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
+<<<<<<< Updated upstream
         <SudarshanaDashboard />
+=======
+        {activeTab === 'sudarshana' ? <SudarshanaDashboard /> : <div className="flex h-full items-center justify-center text-white/50">Chitragupta Module Not Loaded</div>}
+>>>>>>> Stashed changes
       </div>
     </div>
   );

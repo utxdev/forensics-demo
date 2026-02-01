@@ -15,6 +15,7 @@ from modules.sudarshana.graph_engine import graph_engine
 from modules.sudarshana.forensics_manager import forensics_manager
 from modules.sudarshana.analyst import analyst
 
+
 app = FastAPI(title="Sudarshana & Chitragupta API", version="1.0.0")
 
 # CORS Setup
@@ -66,6 +67,7 @@ def trigger_attack():
     
     return {"status": "triggered"}
 
+<<<<<<< Updated upstream
 from pydantic import BaseModel
 class ScanRequest(BaseModel):
     file_path: str
@@ -95,6 +97,9 @@ def trigger_extraction():
 @app.get("/api/sudarshana/extraction_status")
 def get_extraction_status():
     return forensics_manager.get_status()
+=======
+
+>>>>>>> Stashed changes
 
 @app.websocket("/ws/sudarshana")
 async def websocket_endpoint(websocket: WebSocket):

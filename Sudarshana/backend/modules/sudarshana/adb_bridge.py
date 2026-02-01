@@ -204,6 +204,7 @@ class ADBBridge:
              print(f"System extraction error: {e}")
              return []
 
+<<<<<<< Updated upstream
     def scan_device_file(self, remote_path):
         """Scans a file on the device using VirusTotal."""
         if not self.check_connection():
@@ -257,6 +258,101 @@ class ADBBridge:
         except Exception as e:
             print(f"Scan error: {e}")
             return {"error": str(e)}
+=======
+    def list_files(self, path="/sdcard"):
+        """Lists files in a directory on the device."""
+        if not self.check_connection():
+            return []
+        try:
+            # Use ls -l to get more info, though parsing can be tricky.
+            # -p adds a / to directories
+            result = subprocess.run(["adb", "shell", "ls", "-p", path], capture_output=True, text=True, timeout=5)
+            entries = []
+            for line in result.stdout.split('\n'):
+                line = line.strip()
+                if not line: continue
+                is_dir = line.endswith('/')
+                entries.append({
+                    "name": line,
+                    "path": f"{path.rstrip('/')}/{line}",
+                    "isDir": is_dir
+                })
+            return entries
+        except Exception as e:
+            print(f"List files error: {e}")
+            return []
+
+    def get_device_details(self):
+        """Standard Stage 1: Handshake & Device Detection."""
+        if not self.check_connection():
+            return None
+        
+        details = {
+            "model": "Unknown",
+            "serial": "Unknown",
+            "android_version": "Unknown",
+            "connection_type": "USB (ADB)",
+            "timestamp": time.ctime()
+        }
+        
+        try:
+            # Model
+            r = subprocess.run(["adb", "shell", "getprop", "ro.product.model"], capture_output=True, text=True)
+            details["model"] = r.stdout.strip()
+            
+            # Serial
+            r = subprocess.run(["adb", "get-serialno"], capture_output=True, text=True)
+            details["serial"] = r.stdout.strip()
+            
+            # Version
+            r = subprocess.run(["adb", "shell", "getprop", "ro.build.version.release"], capture_output=True, text=True)
+            details["android_version"] = r.stdout.strip()
+
+            print(f"Device Handshake Complete: {details}")
+            return details
+        except Exception as e:
+            print(f"Handshake error: {e}")
+            return details
+
+    def pull_file_with_hash(self, remote_path, local_destination):
+        """Stage 2: Indrajaal Extraction - Pull & Immediate Hash."""
+        if not self.check_connection():
+            return {"success": False, "error": "No device"}
+        
+        try:
+            print(f"INDRAJAAL: Pulling {remote_path}...")
+            start_time = time.time()
+            
+            # 1. Pull
+            result = subprocess.run(["adb", "pull", remote_path, local_destination], capture_output=True, text=True, timeout=60)
+            
+            if result.returncode != 0:
+                 return {"success": False, "error": result.stderr}
+
+            # 2. Immediate Hash (The First Hash)
+            # This simulates checking the file immediately upon arrival
+            import hashlib
+            sha256_hash = hashlib.sha256()
+            with open(local_destination, "rb") as f:
+                # Read and update hash string value in blocks of 4K
+                for byte_block in iter(lambda: f.read(4096), b""):
+                    sha256_hash.update(byte_block)
+            
+            file_hash = sha256_hash.hexdigest()
+            print(f"INDRAJAAL: File Landed. Hash: {file_hash}")
+
+            return {
+                "success": True,
+                "local_path": local_destination,
+                "hash": file_hash,
+                "timestamp": time.ctime(),
+                "logs": result.stderr or "Transfer Success"
+            }
+            
+        except Exception as e:
+            print(f"Pull/Hash error: {e}")
+            return {"success": False, "error": str(e)}
+>>>>>>> Stashed changes
 
     def stop(self):
         self.monitoring = False

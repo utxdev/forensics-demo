@@ -13,6 +13,7 @@
 2026-01-31 20:30:14,486 - File Uploaded: suspicious_stego.jpg (ID: 97041cdb-60a6-400b-b949-b3e9c847b411) from IP: 127.0.0.1
 2026-01-31 20:30:28,503 - File Uploaded: clean_evidence.jpg (ID: dcd2c19d-4186-48e2-ad5f-caf8b3bc1706) from IP: 127.0.0.1
 2026-01-31 20:30:49,632 - File Uploaded: suspicious_stego.jpg (ID: 8c4478a9-59b3-4726-aea7-d4b324ffbbd1) from IP: 127.0.0.1
+<<<<<<< Updated upstream
 2026-02-01 03:33:20,983 - File Uploaded: calllog+spamfilter.apk (ID: c362ad0c-465e-4938-9260-ff3b3007704f) from IP: 127.0.0.1
 2026-02-01 03:33:38,680 - Starting Sandbox Analysis for c362ad0c-465e-4938-9260-ff3b3007704f
 2026-02-01 03:33:39,053 - Checking VT for hash: 3d4cf5e633b6510aad22a553a32539634280d8ad5d2f1a7b85dd1b48072e0ede
@@ -42,3 +43,10 @@
 2026-02-01 03:39:48,135 - File found in VT. Fetching details.
 2026-02-01 03:39:49,344 - HTTP Request: GET https://www.virustotal.com/api/v3/files/586bdfaf758aafd74298a019f3906e142a173cfffd4b9cd9ee3bb18a86b50e45/behaviours "HTTP/1.1 200 OK"
 2026-02-01 03:40:51,906 - HTTP Request: POST https://www.virustotal.com/api/v3/files "HTTP/1.1 413 Request Entity Too Large"
+=======
+2026-02-01 01:34:45,591 - File Uploaded: suspicious_stego.jpg (ID: 11f19a84-3276-4d34-a76e-059db85a54ba) from IP: 127.0.0.1
+2026-02-01 01:35:02,118 - File Uploaded: clean_evidence.jpg (ID: 68bd9710-40af-419a-b37e-df416d182d1a) from IP: 127.0.0.1
+2026-02-01 01:35:36,309 - File Uploaded: Screenshot 2026-01-31 at 1.38.25 AM.png (ID: 4ef14b20-0781-4465-87d0-18ed26207a05) from IP: 127.0.0.1
+2026-02-01 01:49:27,759 - File Uploaded: clean_evidence.jpg (ID: 1e48b749-71f3-42e0-ba74-ef810d1083f8) from IP: 127.0.0.1
+2026-02-01 01:49:40,051 - File Uploaded: suspicious_stego.jpg (ID: 00bb2885-dc29-41ed-b6f9-9e293d1fc56f) from IP: 127.0.0.1
+>>>>>>> Stashed changes

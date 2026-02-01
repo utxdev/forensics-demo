@@ -189,7 +189,12 @@ app.post('/api/generate-report', async (req, res) => {
 
     } catch (error) {
         console.error('Report generation error:', error);
-        res.status(500).json({ error: 'Failed to generate divine report' });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({
+            error: 'Failed to generate divine report',
+            details: errorMessage,
+            hint: 'Ensure files are properly uploaded and case details are provided'
+        });
     }
 });
 
@@ -211,12 +216,7 @@ details = bridge.get_device_details()
 print(json.dumps(details))
 `;
 
-    console.log('[Handshake] Starting python script execution...');
     const pythonProcess = spawn('python3', ['-c', pythonScript]);
-
-    pythonProcess.on('spawn', () => {
-        console.log('[Handshake] Python process spawned successfully.');
-    });
 
     let dataBuffer = '';
     pythonProcess.stdout.on('data', (data) => {
@@ -227,33 +227,21 @@ print(json.dumps(details))
         console.error(`Python Error: ${data}`);
     });
 
-    // Safety Timeout
-    const timeout = setTimeout(() => {
-        console.log('[Handshake] Timeout reached. Killing python process.');
-        pythonProcess.kill();
-        if (!res.headersSent) {
-            res.status(504).json({ error: 'Handshake timed out' });
-        }
-    }, 5000);
-
     pythonProcess.on('close', (code) => {
-        clearTimeout(timeout);
-        if (res.headersSent) return;
-
         try {
             // Find the JSON part in stdout (ignore 'Device Handshake Complete' logs)
             const lines = dataBuffer.trim().split('\n');
             const jsonLine = lines[lines.length - 1];
-            // Validate it looks like JSON
-            if (!jsonLine || !jsonLine.startsWith('{')) {
-                throw new Error("Invalid output format from Python script");
-            }
             const details = JSON.parse(jsonLine);
             res.json(details || { connected: false });
         } catch (e) {
-            console.error('[Handshake] Parse/Process Error:', e);
-            console.error('[Handshake] Raw Buffer:', dataBuffer);
-            res.status(500).json({ error: 'Handshake failed', raw: dataBuffer });
+            console.error('[Handshake] Parse error:', e);
+            console.error('[Handshake] Raw output:', dataBuffer);
+            res.status(500).json({
+                error: 'Handshake failed',
+                details: 'Could not parse device information',
+                raw: dataBuffer.substring(0, 500) // Limit output
+            });
         }
     });
 });
@@ -339,11 +327,82 @@ print(json.dumps(result))
                 res.status(500).json({ error: result.error || 'Pull failed' });
             }
         } catch (e) {
-            console.error(e);
-            res.status(500).json({ error: 'Pipeline Extraction Logic Failed', raw: dataBuffer });
+            console.error('[Pull] Parse error:', e);
+            console.error('[Pull] Raw output:', dataBuffer);
+            res.status(500).json({
+                error: 'Pipeline Extraction Logic Failed',
+                details: e instanceof Error ? e.message : 'Unknown error',
+                raw: dataBuffer.substring(0, 500)
+            });
         }
     });
 
+});
+
+// --- Forensic Scanner Endpoint ---
+
+// Stage 2.5: Forensic Scanner (Comprehensive Device Scan)
+app.post('/api/forensic-scan', async (req, res) => {
+    const { startPath, fileTypes, maxDepth, calculateHashes } = req.body;
+
+    const scanPath = startPath || '/sdcard';
+    const types = fileTypes || ['all'];
+    const depth = maxDepth || 5;
+    const doHashes = calculateHashes || false;
+
+    const { spawn } = await import('child_process');
+    const pythonScript = `
+import sys
+sys.path.append('${path.join(__dirname, '../python_engine')}')
+from forensic_scanner import ForensicScanner
+import json
+
+scanner = ForensicScanner()
+results = scanner.scan_device(
+    start_path='${scanPath}',
+    file_types=${JSON.stringify(types)},
+    max_depth=${depth},
+    calculate_hashes=${doHashes ? 'True' : 'False'}
+)
+print(json.dumps(results))
+`;
+
+    console.log('[Forensic Scan] Starting scan of', scanPath);
+    const pythonProcess = spawn('python3', ['-c', pythonScript]);
+
+    let dataBuffer = '';
+    pythonProcess.stdout.on('data', (data) => {
+        dataBuffer += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`[Forensic Scan] Python: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+        try {
+            const lines = dataBuffer.trim().split('\n');
+            const jsonLine = lines[lines.length - 1];
+            const results = JSON.parse(jsonLine);
+
+            if (results.success) {
+                console.log(`[Forensic Scan] Complete: ${results.total_files_found} files found`);
+                res.json(results);
+            } else {
+                res.status(500).json({
+                    error: results.error || 'Scan failed',
+                    details: 'Forensic scan could not complete'
+                });
+            }
+        } catch (e) {
+            console.error('[Forensic Scan] Parse error:', e);
+            res.status(500).json({
+                error: 'Forensic scan failed',
+                details: e instanceof Error ? e.message : 'Unknown error',
+                raw: dataBuffer.substring(0, 500)
+            });
+        }
+    });
 });
 
 app.listen(PORT, () => {

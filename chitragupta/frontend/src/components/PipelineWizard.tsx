@@ -24,15 +24,8 @@ export const PipelineWizard: React.FC<PipelineWizardProps> = ({ onFilePulled }) 
     const performHandshake = async () => {
         setIsLoading(true);
         addLog("Initiating USB Handshake...");
-
-        // Frontend Timeout Logic
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout (longer than backend)
-
         try {
-            const res = await fetch('http://localhost:3001/api/data-pipeline/handshake', {
-                signal: controller.signal
-            });
+            const res = await fetch('http://localhost:3001/api/data-pipeline/handshake');
             const data = await res.json();
 
             if (data.model && data.model !== 'Unknown') {
@@ -48,15 +41,9 @@ export const PipelineWizard: React.FC<PipelineWizardProps> = ({ onFilePulled }) 
                 addLog("Handshake Failed. Is USB Debugging enabled?");
                 toast.error("Device Not Found");
             }
-        } catch (err: any) {
-            if (err.name === 'AbortError') {
-                addLog("Error: Handshake Request Timed Out.");
-            } else {
-                addLog("Error connecting to backend pipe.");
-            }
-            console.error(err);
+        } catch (err) {
+            addLog("Error connecting to backend pipe.");
         } finally {
-            clearTimeout(timeoutId);
             setIsLoading(false);
         }
     };

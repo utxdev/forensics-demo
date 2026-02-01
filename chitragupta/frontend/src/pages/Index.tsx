@@ -18,6 +18,7 @@ import {
 import { FileText, Shield, Sparkles } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { KarmaSeal } from '@/components/KarmaSeal';
+import { toast } from 'sonner';
 
 const Index = () => {
   const [files, setFiles] = useState<ForensicFile[]>([]);
@@ -69,23 +70,60 @@ const Index = () => {
       if (!res.ok || data.error) {
         console.error('Backend error:', data.error || data);
         setGenerationState({ phase: 'idle', progress: 0, message: 'Error: ' + (data.error || 'Unknown error') });
+        toast.error('Report Generation Failed', {
+          description: data.details || data.error || 'Unknown error'
+        });
         return;
       }
 
-      setReport(data);
+      // Map backend response to ForensicReport format
+      const forensicReport: ForensicReport = {
+        id: data.reportId || crypto.randomUUID(),
+        caseNumber,
+        examiner,
+        createdAt: new Date(data.timestamp),
+        status: 'signed',
+        files: files,
+        merkleRoot: data.merkleRoot,
+        karmaSeal: {
+          signature: data.signature,
+          algorithm: data.algorithm,
+          timestamp: new Date(data.timestamp),
+          ntpServer: data.ntpServer,
+          publicKeyFingerprint: data.publicKeyFingerprint,
+          verified: true
+        },
+        timeline: []
+      };
+
+      setReport(forensicReport);
       setGenerationState({ phase: 'complete', progress: 100, message: 'Report Generated' });
 
     } catch (err) {
-      console.error(err);
-      setGenerationState({ phase: 'idle', progress: 0, message: 'Error: ' + (err instanceof Error ? err.message : 'Unknown') });
+      console.error('Report generation error:', err);
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      setGenerationState({
+        phase: 'idle',
+        progress: 0,
+        message: 'Error: ' + errorMsg
+      });
+      toast.error('Report Generation Failed', {
+        description: errorMsg + '. Check console for details.'
+      });
     }
   };
 
   const downloadPDF = () => {
     if (!report) return;
     const doc = new jsPDF();
-    doc.text(`Forensic Report: ${report.reportId}`, 20, 20);
-    doc.save("report.pdf");
+    doc.text(`Forensic Report: ${report.id}`, 20, 20);
+    doc.text(`Case: ${report.caseNumber}`, 20, 30);
+    doc.text(`Examiner: ${report.examiner}`, 20, 40);
+    doc.text(`Merkle Root: ${report.merkleRoot}`, 20, 50);
+    if (report.karmaSeal) {
+      doc.text(`Signature: ${report.karmaSeal.signature.substring(0, 50)}...`, 20, 60);
+    }
+    doc.save(`forensic_report_${report.id}.pdf`);
   };
 
   return (
@@ -180,7 +218,40 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   className="p-6 bg-card rounded-lg border border-border space-y-6"
                 >
-                  <KarmaSeal report={report} onDownload={downloadPDF} />
+                  <div className="text-center space-y-4">
+                    <h2 className="text-2xl font-bold">Forensic Report Generated</h2>
+                    <p className="text-muted-foreground">Report ID: {report.id}</p>
+
+                    {report.karmaSeal && (
+                      <div className="flex justify-center my-6">
+                        <KarmaSeal seal={report.karmaSeal} size="lg" />
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4 text-left bg-muted/30 p-4 rounded">
+                      <div>
+                        <span className="text-xs text-muted-foreground">Case Number</span>
+                        <p className="font-semibold">{report.caseNumber}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">Examiner</span>
+                        <p className="font-semibold">{report.examiner}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">Files Analyzed</span>
+                        <p className="font-semibold">{report.files.length}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">Merkle Root</span>
+                        <p className="font-mono text-xs">{report.merkleRoot.substring(0, 16)}...</p>
+                      </div>
+                    </div>
+
+                    <Button onClick={downloadPDF} size="lg" className="w-full">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Download PDF Report
+                    </Button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

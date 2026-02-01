@@ -178,6 +178,16 @@ def extract(target):
                      else:
                          return jsonify({"error": "No call logs found."}), 404
 
+                 if target == 'sms':
+                     logger.info("Backup empty. Attempting content provider fallback for SMS...")
+                     fallback_data = extract_sms_via_content_provider(connector)
+                     if fallback_data:
+                         with open(output_file, 'w') as f:
+                            json.dump(fallback_data, f, indent=4, default=str)
+                         return jsonify({"success": True, "data": fallback_data})
+                     else:
+                         return jsonify({"error": "No SMS messages found."}), 404
+
                  return jsonify({"error": f"Database {target_filename} not found in backup."}), 404
 
             # 3. Parse
@@ -421,6 +431,28 @@ def extract_calls_via_content_provider(connector):
     except Exception as e:
         logger.error(f"Content provider extraction failed: {e}")
         return []
+
+
+def extract_sms_via_content_provider(connector):
+    """
+    Fallback: Extracts SMS via content provider query.
+    """
+    try:
+        # Query the sms provider
+        cmd = "content query --uri content://sms/"
+        output = connector.shell(cmd)
+        
+        # Use our robust parser
+        data = SMSParser.parse_adb_output(output)
+        
+        # Sort by date
+        data.sort(key=lambda x: x.get('date', 0), reverse=True)
+        return data
+
+    except Exception as e:
+        logger.error(f"SMS Content provider extraction failed: {e}")
+        return []
+
 
 
 def extract_real_apps():
