@@ -1,0 +1,4 @@
+flask
+flask-cors
+apscheduler
+simple_chalk

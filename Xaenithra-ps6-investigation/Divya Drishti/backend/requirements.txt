@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+pillow
+opencv-python
+numpy
+exifread
+piexif
+ffmpeg-python
+python-magic-bin
+httpx
+pytest
+python-dotenv

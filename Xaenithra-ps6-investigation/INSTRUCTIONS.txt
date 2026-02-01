@@ -1,0 +1,23 @@
+
+# HOW TO RUN TRINETRA (FULL SUITE)
+
+To run the complete Integrated Forensic Suite (Indrajaal + Sudarshana + Kaal Chakra + Chitragupta):
+
+1. Open your terminal (or tell the Agent to):
+
+2. Execute this EXACT sequence:
+
+   git clone https://github.com/utxdev/Xaenithra-ps6-investigation
+   cd Xaenithra-ps6-investigation
+   python run_trinetra.py
+
+---------------------------------------------------------
+WHAT THIS DOES:
+- It downloads the code.
+- It installs all Python dependencies (for Extraction & Threat Engine).
+- It installs all Frontend dependencies.
+- It LAUNCHES all 3 servers automatically.
+- It OPENS the Unified Dashboard (Trinetra Hub) in your browser.
+
+DO NOT run 'npm run dev' manually unless you know what you are doing.
+ALWAYS use `python run_trinetra.py`.

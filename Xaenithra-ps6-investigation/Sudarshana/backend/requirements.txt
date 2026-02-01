@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+scapy
+networkx
+scikit-learn
+yara-python
+reportlab
+cryptography
+pydantic
+numpy
+websockets
+python-multipart
+# For ADB interaction if needed via lib, but we might use subprocess
+requests
+python-dotenv
