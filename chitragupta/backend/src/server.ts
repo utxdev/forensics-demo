@@ -211,7 +211,12 @@ details = bridge.get_device_details()
 print(json.dumps(details))
 `;
 
+    console.log('[Handshake] Starting python script execution...');
     const pythonProcess = spawn('python3', ['-c', pythonScript]);
+
+    pythonProcess.on('spawn', () => {
+        console.log('[Handshake] Python process spawned successfully.');
+    });
 
     let dataBuffer = '';
     pythonProcess.stdout.on('data', (data) => {
@@ -222,14 +227,32 @@ print(json.dumps(details))
         console.error(`Python Error: ${data}`);
     });
 
+    // Safety Timeout
+    const timeout = setTimeout(() => {
+        console.log('[Handshake] Timeout reached. Killing python process.');
+        pythonProcess.kill();
+        if (!res.headersSent) {
+            res.status(504).json({ error: 'Handshake timed out' });
+        }
+    }, 5000);
+
     pythonProcess.on('close', (code) => {
+        clearTimeout(timeout);
+        if (res.headersSent) return;
+
         try {
             // Find the JSON part in stdout (ignore 'Device Handshake Complete' logs)
             const lines = dataBuffer.trim().split('\n');
             const jsonLine = lines[lines.length - 1];
+            // Validate it looks like JSON
+            if (!jsonLine || !jsonLine.startsWith('{')) {
+                throw new Error("Invalid output format from Python script");
+            }
             const details = JSON.parse(jsonLine);
             res.json(details || { connected: false });
         } catch (e) {
+            console.error('[Handshake] Parse/Process Error:', e);
+            console.error('[Handshake] Raw Buffer:', dataBuffer);
             res.status(500).json({ error: 'Handshake failed', raw: dataBuffer });
         }
     });
