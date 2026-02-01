@@ -247,7 +247,9 @@ function App() {
                                                 new Date(Number(log.date) || log.date).toLocaleString()
                                             }</td>
                                             <td className="p-3 font-semibold text-cyber-secondary">{log.number}</td>
-                                            <td className="p-3 opacity-90">{log.name || "-"}</td>
+                                            <td className="p-3 opacity-90">
+                                                {(log.name && log.name !== "NULL" && log.name !== "Unknown") ? log.name : log.number}
+                                            </td>
                                             <td className="p-3 font-mono opacity-70">{log.duration}</td>
                                             <td className="p-3">
                                                 <span className={`px-2 py-0.5 rounded text-[10px] uppercase ${log.type_label === 'Missed' ? 'bg-red-500/20 text-red-500' :

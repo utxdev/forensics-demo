@@ -308,7 +308,6 @@ def generate_mock_data():
         "address": "Simulated Location"
     }
     locations.insert(0, new_loc)
-    locations = locations[:50]
     with open(loc_file, 'w') as f:
         json.dump(locations, f, indent=4)
     logger.info("Generated mock SMS and Location data.")
@@ -355,9 +354,11 @@ def extract_calls_via_content_provider(connector):
     """
     try:
         # Query the call_log provider
-        # Columns: number, date, duration, type, name
-        cmd = "content query --uri content://call_log/calls --projection number:date:duration:type:name"
+        # Columns: number, date, duration, type, name, formatted_number, normalized_number
+        cmd = "content query --uri content://call_log/calls --projection number:date:duration:type:name:formatted_number:normalized_number"
         output = connector.shell(cmd)
+        
+        logger.info(f"Raw Call Log Output (First 500 chars): {output[:500]}") # Debug logging
         
         # Output format is usually:
         # Row: 0 number=123, date=123..., ...
@@ -365,12 +366,17 @@ def extract_calls_via_content_provider(connector):
         data = []
         for line in output.splitlines():
             if line.startswith("Row:"):
-                # Parse the K=V pairs
-                # This is a simple parser, might need more robustness for commas in names
-                # But typically name is just a name.
-                
+                # Clean up the "Row: <index> " prefix which breaks comma splitting if we aren't careful
+                # "Row: 0 number=..." -> "number=..."
+                try:
+                    # Split by space, max 2 splits.
+                    # [0]="Row:", [1]="0", [2]="number=..."
+                    clean_line = line.split(" ", 2)[2]
+                except IndexError:
+                    continue
+
                 entry = {}
-                parts = line.split(", ") # Split by ", " sequence
+                parts = clean_line.split(", ") # Split by ", " sequence
                 for part in parts:
                     if "=" in part:
                          k, v = part.split("=", 1)
@@ -392,8 +398,15 @@ def extract_calls_via_content_provider(connector):
                 except:
                     date_str = date_ms
 
+                # Number Fallback
+                number = entry.get('number', "")
+                if not number or number == "Unknown":
+                     number = entry.get('formatted_number', "")
+                if not number or number == "Unknown":
+                     number = entry.get('normalized_number', "Unknown")
+
                 data.append({
-                    "number": entry.get('number', "Unknown"),
+                    "number": number,
                     "date": date_ms, # Keep raw ms for frontend sorting/display logic if needed, or string
                     "duration": entry.get('duration', "0"),
                     "type": call_type,
