@@ -1,0 +1,12 @@
+# Backend
+backend/access_log.txt
+backend/uploads/
+backend/__pycache__/
+backend/.env
+backend/venv/
+backend/debug_imports.py
+
+# Frontend Web
+frontend-web/node_modules/
+frontend-web/.env
+frontend-web/dist/
